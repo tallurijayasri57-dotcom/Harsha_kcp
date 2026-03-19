@@ -14,7 +14,7 @@ const db = mysql.createConnection({
     host: process.env.MYSQLHOST || "localhost",
     user: process.env.MYSQLUSER || "root",
     password: process.env.MYSQLPASSWORD || "22H71A05D1",
-    database: process.env.MYSQLDATABASE || "KCP_CRK_APP",
+    database: process.env.MYSQLDATABASE || "railway",,
     port: process.env.MYSQLPORT || 3306
 });
 
