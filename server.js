@@ -8,13 +8,12 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static("public"));
 app.use(express.json());
-app.use(express.static("public"));
 
 const db = mysql.createConnection({
     host: process.env.MYSQLHOST || "localhost",
     user: process.env.MYSQLUSER || "root",
     password: process.env.MYSQLPASSWORD || "22H71A05D1",
-    database: process.env.MYSQLDATABASE || "railway",,
+    database: process.env.MYSQLDATABASE || "railway",
     port: process.env.MYSQLPORT || 3306
 });
 
@@ -276,50 +275,6 @@ app.get("/player-stats/:playerName", (req, res) => {
 });
 
 // ================= SERVER =================
-// ================= PLAYER STATS =================
-
-app.post("/player-stats", (req, res) => {
-    const { player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded } = req.body;
-    if(!player_name || !match_type) return res.status(400).json({ error: "player_name and match_type required" });
-    db.query(
-        `INSERT INTO player_stats (player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-            player_name, team_name || "",
-            match_date || new Date().toISOString().split("T")[0],
-            match_type, runs || 0, balls_faced || 0, fours || 0,
-            sixes || 0, wickets || 0, overs_bowled || "0.0", runs_conceded || 0
-        ],
-        (err, result) => {
-            if(err){ console.log(err); return res.status(500).json({ error: err.message }); }
-            res.json({ success: true, id: result.insertId });
-        }
-    );
-});
-
-app.get("/player-stats/:playerName", (req, res) => {
-    db.query(
-        "SELECT * FROM player_stats WHERE player_name = ? ORDER BY match_date DESC, id DESC",
-        [req.params.playerName],
-        (err, result) => {
-            if(err){ console.log(err); return res.status(500).json({ error: err.message }); }
-            res.json(result);
-        }
-    );
-});
-
-// ================= SERVER =================
-
-app.listen(3000, ()=>{
-    console.log("Server running on http://localhost:3000");
-});
-
-
-
-
-// ================= PLAYER STATS =================   ← NEW
-                       
-             
 
 app.listen(3000, ()=>{
     console.log("Server running on http://localhost:3000");
