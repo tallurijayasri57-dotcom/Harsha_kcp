@@ -11,10 +11,11 @@ app.use(express.json());
 app.use(express.static("public"));
 
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "22H71A05D1",
-    database: "KCP_CRK_APP"
+    host: process.env.MYSQLHOST || "localhost",
+    user: process.env.MYSQLUSER || "root",
+    password: process.env.MYSQLPASSWORD || "22H71A05D1",
+    database: process.env.MYSQLDATABASE || "KCP_CRK_APP",
+    port: process.env.MYSQLPORT || 3306
 });
 
 db.connect(err => {
