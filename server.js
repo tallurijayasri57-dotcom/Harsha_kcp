@@ -274,6 +274,54 @@ app.get("/player-stats/:playerName", (req, res) => {
     );
 });
 
+// ================= PLAYER PROFILE =================
+
+app.get("/player-profile", (req, res) => {
+
+    db.query("SELECT * FROM player_profile", (err, result) => {
+
+        if(err) return res.status(500).send(err);
+
+        res.json(result);
+
+    });
+
+});
+
+app.post("/player-profile", (req, res) => {
+
+    const { player_name, team_name, runs, role } = req.body;
+
+    db.query(
+
+        "INSERT INTO player_profile (player_name, team_name, runs, role) VALUES (?, ?, ?, ?)",
+
+        [player_name, team_name || "", runs || 0, role || ""],
+
+        (err, result) => {
+
+            if(err) return res.status(500).json({ error: err.message });
+
+            res.json({ success: true, id: result.insertId });
+
+        }
+
+    );
+
+});
+
+app.delete("/player-profile/:id", (req, res) => {
+
+    db.query("DELETE FROM player_profile WHERE player_id=?", [req.params.id], (err) => {
+
+        if(err) return res.status(500).send(err);
+
+        res.json({ message: "Deleted" });
+
+    });
+
+});
+
 // ================= SERVER =================
 
 app.listen(3000, ()=>{
