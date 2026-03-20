@@ -788,7 +788,7 @@ html, body { overflow-x: hidden; }
   <h2>🏆 Points Table</h2>
   <div class="section">
     <table>
-      <thead><tr><th>#</th><th>Team</th><th>M</th><th>W</th><th>L</th><th>Pts</th></tr></thead>
+      <thead><tr><th>#</th><th>Team</th><th>M</th><th>W</th><th>L</th><th>Pts</th><th>NRR</th></tr></thead>
       <tbody id="pointsTableBody"></tbody>
     </table>
   </div>
@@ -1274,15 +1274,24 @@ function switchInnings() {
 function saveMatchResult(winner, loser, winType, margin) {
   let today = new Date().toLocaleDateString("en-IN");
   fetch(API + "/match-results", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winner, loser, win_type: winType, margin, played_on: today }) }).catch(() => {});
-  fetch(API + "/points-table/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winner, loser }) }).catch(() => {});
+  let winnerRuns = totalRuns, winnerOvers = parseFloat(Math.floor(ballCount/6) + "." + (ballCount%6));
+  let loserRuns = target > 0 ? target - 1 : 0, loserOvers = parseFloat(Math.floor(totalOvers*6/6) + "." + 0);
+  fetch(API + "/points-table/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winner, loser, winner_runs: winnerRuns, winner_overs: winnerOvers, loser_runs: loserRuns, loser_overs: loserOvers }) }).catch(() => {});
 }
 function loadPointsTable() {
   fetch(API + "/points-table", { cache: "no-store" })
   .then(res => res.json())
   .then(data => {
     let tbody = document.getElementById("pointsTableBody");
-    if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="color:#4b5563;text-align:center;padding:20px;">No matches played yet</td></tr>'; return; }
-    tbody.innerHTML = data.map((t, i) => '<tr><td>' + (i+1) + '</td><td>' + t.team_name + '</td><td>' + t.matches_played + '</td><td>' + t.wins + '</td><td>' + t.losses + '</td><td><b style="color:#6ee7b7;">' + t.points + '</b></td></tr>').join("");
+    if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="color:#4b5563;text-align:center;padding:20px;">No matches played yet</td></tr>'; return; }
+    tbody.innerHTML = data.map((t, i) => {
+      let nrr = 0;
+      if (t.overs_faced > 0 && t.overs_bowled > 0) {
+        nrr = (t.runs_scored / t.overs_faced) - (t.runs_conceded / t.overs_bowled);
+      }
+      let nrrStr = (nrr >= 0 ? "+" : "") + nrr.toFixed(3);
+      return '<tr><td>' + (i+1) + '</td><td>' + t.team_name + '</td><td>' + t.matches_played + '</td><td>' + t.wins + '</td><td>' + t.losses + '</td><td><b style="color:#6ee7b7;">' + t.points + '</b></td><td style="color:' + (nrr >= 0 ? "#6ee7b7" : "#f87171") + ';">' + nrrStr + '</td></tr>';
+    }).join("");
   }).catch(() => {});
 }
 function finishMatch() {
