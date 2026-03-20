@@ -346,6 +346,8 @@ app.post("/points-table/update", (req, res) => {
                 [loser, loser_runs||0, winner_runs||0, loser_overs||0, winner_overs||0, loser_runs||0, winner_runs||0, loser_overs||0, winner_overs||0],
                 (err2) => {
                     if(err2) return res.status(500).send(err2);
+			db.query(`UPDATE points_table SET net_run_rate = CASE WHEN overs_bowled > 0 AND overs_faced > 0 THEN ROUND((runs_scored / overs_faced) - (runs_conceded / overs_bowled), 3) ELSE 0 END`);
+
                     res.json({ message: "Points updated" });
                 });
         });
