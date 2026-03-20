@@ -659,6 +659,7 @@ html, body { overflow-x: hidden; }
   <button onclick="showPage('teams')">Teams</button>
   <button onclick="showPage('matches')">Matches</button>
   <button onclick="showPage('score')">Live Score</button>
+  <button onclick="showPage('points')">Points Table</button>
   <button onclick="logout()">Logout</button>
 </nav>
 <div id="loginPage">
@@ -783,6 +784,15 @@ html, body { overflow-x: hidden; }
   <button onclick="switchInnings()">Switch Innings</button>
   <button onclick="finishMatch()">Finish Match</button>
 </div>
+<div id="points" class="page">
+  <h2>🏆 Points Table</h2>
+  <div class="section">
+    <table>
+      <thead><tr><th>#</th><th>Team</th><th>M</th><th>W</th><th>L</th><th>Pts</th></tr></thead>
+      <tbody id="pointsTableBody"></tbody>
+    </table>
+  </div>
+</div>
 <script>
 const API = "https://harsha-kcp.onrender.com";
 let isLogin = true;
@@ -815,7 +825,7 @@ function showWinPopup(winner, margin) {
   document.getElementById("winMarginText").innerText = margin;
   document.getElementById("winPopupOverlay").classList.add("open");
 }
-function closeWinPopup() { document.getElementById("winPopupOverlay").classList.remove("open");showpage("home"); location.reload(); }
+function closeWinPopup() { document.getElementById("winPopupOverlay").classList.remove("open"); location.reload(); }
 function toggleAuth() {
   isLogin = !isLogin;
   authTitle.innerText = isLogin ? "Welcome Back" : "Create Account";
@@ -863,6 +873,7 @@ function showPage(id) {
   document.querySelectorAll(".page").forEach(p => p.style.display = "none");
   document.getElementById(id).style.display = "block";
   if (id === "matches") { loadMatchTeamDropdowns(); loadUpcomingTeamDropdowns(); loadUpcomingMatches(); }
+  if (id === "points") { loadPointsTable(); }
 }
 function switchTab(tab) {
   document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -1263,6 +1274,16 @@ function switchInnings() {
 function saveMatchResult(winner, loser, winType, margin) {
   let today = new Date().toLocaleDateString("en-IN");
   fetch(API + "/match-results", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winner, loser, win_type: winType, margin, played_on: today }) }).catch(() => {});
+  fetch(API + "/points-table/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winner, loser }) }).catch(() => {});
+}
+function loadPointsTable() {
+  fetch(API + "/points-table", { cache: "no-store" })
+  .then(res => res.json())
+  .then(data => {
+    let tbody = document.getElementById("pointsTableBody");
+    if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="color:#4b5563;text-align:center;padding:20px;">No matches played yet</td></tr>'; return; }
+    tbody.innerHTML = data.map((t, i) => '<tr><td>' + (i+1) + '</td><td>' + t.team_name + '</td><td>' + t.matches_played + '</td><td>' + t.wins + '</td><td>' + t.losses + '</td><td><b style="color:#6ee7b7;">' + t.points + '</b></td></tr>').join("");
+  }).catch(() => {});
 }
 function finishMatch() {
   if (winShown) return;
