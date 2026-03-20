@@ -322,6 +322,26 @@ app.delete("/player-profile/:id", (req, res) => {
 
 });
 
+// ================= POINTS TABLE =================
+
+app.get("/points-table", (req, res) => {
+    db.query("SELECT * FROM points_table ORDER BY points DESC, net_run_rate DESC", (err, result) => {
+        if(err) return res.status(500).send(err);
+        res.json(result);
+    });
+});
+
+app.post("/points-table/update", (req, res) => {
+    const { winner, loser } = req.body;
+    db.query("INSERT INTO points_table (team_name, matches_played, wins, losses, points) VALUES (?, 1, 1, 0, 2) ON DUPLICATE KEY UPDATE matches_played=matches_played+1, wins=wins+1, points=points+2", [winner], (err) => {
+        if(err) return res.status(500).send(err);
+        db.query("INSERT INTO points_table (team_name, matches_played, wins, losses, points) VALUES (?, 1, 0, 1, 0) ON DUPLICATE KEY UPDATE matches_played=matches_played+1, losses=losses+1", [loser], (err2) => {
+            if(err2) return res.status(500).send(err2);
+            res.json({ message: "Points updated" });
+        });
+    });
+});
+
 // ================= SERVER =================
 
 app.listen(process.env.PORT || 3000, ()=>{
