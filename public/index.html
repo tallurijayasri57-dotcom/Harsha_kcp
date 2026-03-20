@@ -1441,7 +1441,7 @@ async function openPlayerProfile(playerName, teamName, role) {
     "<div class='profile-no-matches'>⏳ Loading...</div>";
 
   try {
-    const res = await fetch(API + "/player-stats/" + encodeURIComponent(playerName), { cache: "no-store" });
+    await fetch(API + "/player-profile", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({ player_name: playerName, team_name: teamName, role: role, runs: 0 }) }); 0 }) });`n const res = await fetch(API + /player-stats/" + encodeURIComponent(playerName), { cache: "no-store" });
     const rows = await res.json();
 
     let totalRn = 0, totalBl = 0, totalFr = 0, totalSx = 0, hs = 0;
