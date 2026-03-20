@@ -815,7 +815,7 @@ function showWinPopup(winner, margin) {
   document.getElementById("winMarginText").innerText = margin;
   document.getElementById("winPopupOverlay").classList.add("open");
 }
-function closeWinPopup() { document.getElementById("winPopupOverlay").classList.remove("open"); location.reload(); }
+function closeWinPopup() { document.getElementById("winPopupOverlay").classList.remove("open");showpage("home"); location.reload(); }
 function toggleAuth() {
   isLogin = !isLogin;
   authTitle.innerText = isLogin ? "Welcome Back" : "Create Account";
