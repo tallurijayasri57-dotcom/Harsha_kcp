@@ -324,6 +324,6 @@ app.delete("/player-profile/:id", (req, res) => {
 
 // ================= SERVER =================
 
-app.listen(3000, ()=>{
+app.listen(process.env.PORT || 3000, ()=>{
     console.log("Server running on http://localhost:3000");
 });
