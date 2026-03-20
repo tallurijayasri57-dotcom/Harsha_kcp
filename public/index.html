@@ -1200,8 +1200,8 @@ function authenticate() {
   }
 }
 
-function logout() { localStorage.removeItem("currentUser"); location.reload(); }
-localStorage.removeItem("currentUser");
+function logout() { // removed location.reload(); }
+// removed
 
 function startApp() {
   document.getElementById("loginPage").style.display = "none";
