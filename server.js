@@ -385,6 +385,18 @@ app.post("/upload-photo", upload.single("photo"), (req, res) => {
         }
     ).end(req.file.buffer);
 });
+
+app.get("/player-photo/:player_name", (req, res) => {
+    db.query(
+        "SELECT photo_url FROM players WHERE player_name=?",
+        [req.params.player_name],
+        (err, result) => {
+            if(err) return res.status(500).json({ error: err.message });
+            if(result.length === 0) return res.json({ photo_url: null });
+            res.json({ photo_url: result[0].photo_url });
+        }
+    );
+});
 // ================= SERVER =================
 
 app.listen(process.env.PORT || 3000, ()=>{
