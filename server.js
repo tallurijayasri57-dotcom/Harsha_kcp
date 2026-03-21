@@ -2,6 +2,17 @@ const express = require("express");
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const cloudinary = require("cloudinary").v2;
+const multer = require("multer");
+
+cloudinary.config({
+    cloud_name: "das4ixee0",
+    api_key: "257379219351122",
+    api_secret: "7kqK84VNi8Soby13w5"
+});
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const app = express();
 app.use(bodyParser.json());
@@ -352,6 +363,28 @@ app.post("/points-table/update", (req, res) => {
                     res.json({ message: "Points updated" });
                 });
         });
+});
+
+
+// ================= PHOTO UPLOAD =================
+
+app.post("/upload-photo", upload.single("photo"), (req, res) => {
+    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+    const player_name = req.body.player_name;
+    cloudinary.uploader.upload_stream(
+        { folder: "kcp_players", public_id: player_name.replace(/\s+/g, "_") },
+        (error, result) => {
+            if (error) return res.status(500).json({ error: error.message });
+            db.query(
+                "UPDATE players SET photo_url=? WHERE player_name=?",
+                [result.secure_url, player_name],
+                (err) => {
+                    if (err) return res.status(500).json({ error: err.message });
+                    res.json({ success: true, url: result.secure_url });
+                }
+            );
+        }
+    ).end(req.file.buffer);
 });
 // ================= SERVER =================
 
