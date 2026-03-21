@@ -40,599 +40,176 @@ ul{list-style:none;padding:0;}
               radial-gradient(circle at 20% 80%, rgba(0,0,0,0.2) 0%, transparent 50%);
   pointer-events: none;
 }
-.cricket-banner .pitch-lines {
-  position: absolute; right: 0; top: 0; bottom: 0; width: 55%; overflow: hidden; opacity: 0.12;
-}
-.cricket-banner .pitch-lines::before {
-  content: ''; position: absolute; right: -30px; top: 50%; transform: translateY(-50%);
-  width: 340px; height: 340px; border-radius: 50%; border: 40px solid #fff;
-}
-.cricket-banner .pitch-lines::after {
-  content: ''; position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
-  width: 180px; height: 180px; border-radius: 50%; border: 20px solid #fff;
-}
+.cricket-banner .pitch-lines { position: absolute; right: 0; top: 0; bottom: 0; width: 55%; overflow: hidden; opacity: 0.12; }
+.cricket-banner .pitch-lines::before { content: ''; position: absolute; right: -30px; top: 50%; transform: translateY(-50%); width: 340px; height: 340px; border-radius: 50%; border: 40px solid #fff; }
+.cricket-banner .pitch-lines::after { content: ''; position: absolute; right: 40px; top: 50%; transform: translateY(-50%); width: 180px; height: 180px; border-radius: 50%; border: 20px solid #fff; }
 .banner-content { position: relative; z-index: 2; padding: 36px 40px; flex: 1; }
-.banner-league-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 20px; padding: 4px 14px 4px 10px;
-  font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600;
-  letter-spacing: 1.5px; text-transform: uppercase; color: #a7f3d0; margin-bottom: 14px;
-}
-.banner-title {
-  font-family: 'Rajdhani', sans-serif; font-size: clamp(28px, 4vw, 46px);
-  font-weight: 700; line-height: 1.05; color: #ffffff; margin: 0 0 10px;
-  letter-spacing: 1px; text-shadow: 0 2px 12px rgba(0,0,0,0.3);
-}
+.banner-league-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px 4px 10px; font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #a7f3d0; margin-bottom: 14px; }
+.banner-title { font-family: 'Rajdhani', sans-serif; font-size: clamp(28px, 4vw, 46px); font-weight: 700; line-height: 1.05; color: #ffffff; margin: 0 0 10px; letter-spacing: 1px; text-shadow: 0 2px 12px rgba(0,0,0,0.3); }
 .banner-title span { color: #6ee7b7; }
-.banner-sub {
-  font-family: 'Inter', sans-serif; font-size: 14px;
-  color: rgba(255,255,255,0.65); margin: 0 0 24px; max-width: 360px; line-height: 1.6;
-}
+.banner-sub { font-family: 'Inter', sans-serif; font-size: 14px; color: rgba(255,255,255,0.65); margin: 0 0 24px; max-width: 360px; line-height: 1.6; }
 .banner-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-.banner-btn-primary {
-  padding: 11px 24px; background: #ffffff; color: #065f46; border: none;
-  border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 14px;
-  font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
-  transition: all 0.2s; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-}
+.banner-btn-primary { padding: 11px 24px; background: #ffffff; color: #065f46; border: none; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
 .banner-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
-.banner-btn-secondary {
-  padding: 11px 24px; background: rgba(255,255,255,0.12); color: #ffffff;
-  border: 1px solid rgba(255,255,255,0.25); border-radius: 8px;
-  font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 600;
-  letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
-  transition: all 0.2s; backdrop-filter: blur(4px);
-}
+.banner-btn-secondary { padding: 11px 24px; background: rgba(255,255,255,0.12); color: #ffffff; border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(4px); }
 .banner-btn-secondary:hover { background: rgba(255,255,255,0.2); }
-.banner-illustration {
-  position: relative; z-index: 2; padding: 20px 40px 20px 0;
-  display: flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 0;
-}
+.banner-illustration { position: relative; z-index: 2; padding: 20px 40px 20px 0; display: flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 0; }
 @media (max-width: 600px) { .banner-illustration { display: none; } }
-.big-cricket-emoji {
-  font-size: 90px; line-height: 1;
-  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.4));
-  animation: floatBall 3s ease-in-out infinite;
-}
-@keyframes floatBall {
-  0%, 100% { transform: translateY(0px) rotate(-5deg); }
-  50%       { transform: translateY(-10px) rotate(5deg); }
-}
-.dashboard-stats {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 14px; margin-bottom: 24px;
-}
-.stat-card {
-  background: linear-gradient(145deg, #111827, #0f172a);
-  border: 1px solid rgba(255,255,255,0.06); border-radius: 12px;
-  padding: 18px 20px; display: flex; align-items: center; gap: 14px;
-  transition: transform 0.2s, border-color 0.2s; cursor: pointer;
-}
+.big-cricket-emoji { font-size: 90px; line-height: 1; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.4)); animation: floatBall 3s ease-in-out infinite; }
+@keyframes floatBall { 0%, 100% { transform: translateY(0px) rotate(-5deg); } 50% { transform: translateY(-10px) rotate(5deg); } }
+.dashboard-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.stat-card { background: linear-gradient(145deg, #111827, #0f172a); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 14px; transition: transform 0.2s, border-color 0.2s; cursor: pointer; }
 .stat-card:hover { transform: translateY(-2px); border-color: rgba(5,150,105,0.3); }
 .stat-icon { font-size: 28px; line-height: 1; }
-.stat-info .stat-val {
-  font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700;
-  color: #6ee7b7; line-height: 1;
-}
-.stat-info .stat-lbl {
-  font-family: 'Inter', sans-serif; font-size: 11px; color: #4b5563;
-  text-transform: uppercase; letter-spacing: 1px; margin-top: 2px;
-}
-#loginPage {
-  display: flex; align-items: center; justify-content: center;
-  min-height: 100vh; padding: 0; background: #0b0f1a; position: relative; overflow: hidden;
-}
-#loginPage::before {
-  content: ''; position: absolute; width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
-  top: -100px; right: -100px; border-radius: 50%; pointer-events: none;
-}
-#loginPage::after {
-  content: ''; position: absolute; width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(22,163,74,0.1) 0%, transparent 70%);
-  bottom: -50px; left: -50px; border-radius: 50%; pointer-events: none;
-}
-.auth-card {
-  background: linear-gradient(145deg, #111827, #0f172a);
-  border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 48px 40px;
-  width: 100%; max-width: 400px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(37,99,235,0.1);
-  position: relative; z-index: 1; animation: fadeUp 0.5s ease;
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+.stat-info .stat-val { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: #6ee7b7; line-height: 1; }
+.stat-info .stat-lbl { font-family: 'Inter', sans-serif; font-size: 11px; color: #4b5563; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+#loginPage { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 0; background: #0b0f1a; position: relative; overflow: hidden; }
+#loginPage::before { content: ''; position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%); top: -100px; right: -100px; border-radius: 50%; pointer-events: none; }
+#loginPage::after { content: ''; position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(22,163,74,0.1) 0%, transparent 70%); bottom: -50px; left: -50px; border-radius: 50%; pointer-events: none; }
+.auth-card { background: linear-gradient(145deg, #111827, #0f172a); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 400px; box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(37,99,235,0.1); position: relative; z-index: 1; animation: fadeUp 0.5s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 .auth-logo { text-align: center; margin-bottom: 32px; }
 .auth-logo .logo-icon { display: block; margin-bottom: 8px; }
-.auth-logo h1 {
-  font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700;
-  letter-spacing: 2px; color: #fff; margin: 0; text-transform: uppercase;
-}
-.auth-logo p {
-  font-family: 'Inter', sans-serif; font-size: 12px; color: #4b5563;
-  margin: 4px 0 0; letter-spacing: 1px; text-transform: uppercase;
-}
-#authTitle {
-  font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 600;
-  color: #e5e7eb; margin: 0 0 24px; letter-spacing: 1px; text-align: center;
-}
+.auth-logo h1 { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: 2px; color: #fff; margin: 0; text-transform: uppercase; }
+.auth-logo p { font-family: 'Inter', sans-serif; font-size: 12px; color: #4b5563; margin: 4px 0 0; letter-spacing: 1px; text-transform: uppercase; }
+#authTitle { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 600; color: #e5e7eb; margin: 0 0 24px; letter-spacing: 1px; text-align: center; }
 .auth-field { position: relative; margin-bottom: 16px; }
-.auth-field .field-icon {
-  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-  font-size: 16px; opacity: 0.4; pointer-events: none;
-}
-.auth-field input {
-  width: 100%; padding: 13px 14px 13px 42px; background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #e5e7eb;
-  font-family: 'Inter', sans-serif; font-size: 14px; box-sizing: border-box; margin: 0;
-  transition: border-color 0.2s, background 0.2s; outline: none;
-}
+.auth-field .field-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; opacity: 0.4; pointer-events: none; }
+.auth-field input { width: 100%; padding: 13px 14px 13px 42px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #e5e7eb; font-family: 'Inter', sans-serif; font-size: 14px; box-sizing: border-box; margin: 0; transition: border-color 0.2s, background 0.2s; outline: none; }
 .auth-field input:focus { border-color: rgba(37,99,235,0.6); background: rgba(37,99,235,0.05); }
 .auth-field input::placeholder { color: #4b5563; }
-.auth-btn {
-  width: 100%; padding: 14px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  border: none; border-radius: 10px; color: white;
-  font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 600;
-  letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; margin-top: 8px;
-  transition: all 0.2s; box-shadow: 0 4px 20px rgba(37,99,235,0.3);
-}
+.auth-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 10px; color: white; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; margin-top: 8px; transition: all 0.2s; box-shadow: 0 4px 20px rgba(37,99,235,0.3); }
 .auth-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(37,99,235,0.45); }
 .auth-btn:active { transform: translateY(0); }
-.auth-switch {
-  text-align: center; margin-top: 20px;
-  font-family: 'Inter', sans-serif; font-size: 13px; color: #4b5563;
-}
+.auth-switch { text-align: center; margin-top: 20px; font-family: 'Inter', sans-serif; font-size: 13px; color: #4b5563; }
 .auth-switch span { color: #3b82f6; font-weight: 500; cursor: pointer; transition: color 0.2s; }
 .auth-switch span:hover { color: #60a5fa; }
 .auth-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
-.auth-divider::before, .auth-divider::after {
-  content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06);
-}
-.auth-divider span {
-  font-family: 'Inter', sans-serif; font-size: 11px;
-  color: #374151; letter-spacing: 1px; text-transform: uppercase;
-}
-#allPlayersModal, #leagueModal {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.7); z-index: 999;
-  align-items: center; justify-content: center;
-}
+.auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+.auth-divider span { font-family: 'Inter', sans-serif; font-size: 11px; color: #374151; letter-spacing: 1px; text-transform: uppercase; }
+#allPlayersModal, #leagueModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 999; align-items: center; justify-content: center; }
 #allPlayersModal.open, #leagueModal.open { display: flex; }
-.modal-box {
-  background: #111827; border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 16px; padding: 28px; width: 90%; max-width: 600px;
-  max-height: 80vh; overflow-y: auto;
-}
-.modal-box h3 {
-  font-family: 'Rajdhani', sans-serif; font-size: 20px;
-  margin: 0 0 16px; color: #6ee7b7;
-}
+.modal-box { background: #111827; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; }
+.modal-box h3 { font-family: 'Rajdhani', sans-serif; font-size: 20px; margin: 0 0 16px; color: #6ee7b7; }
 .modal-team-block { margin-bottom: 20px; }
-.modal-team-block h4 {
-  font-family: 'Rajdhani', sans-serif; font-size: 16px; color: #a7f3d0;
-  margin: 0 0 8px; border-bottom: 1px solid rgba(255,255,255,0.07); padding-bottom: 6px;
-}
-.modal-player-row {
-  padding: 6px 10px; font-size: 14px; color: #e5e7eb; border-radius: 6px;
-  display: flex; align-items: center; justify-content: space-between;
-}
+.modal-team-block h4 { font-family: 'Rajdhani', sans-serif; font-size: 16px; color: #a7f3d0; margin: 0 0 8px; border-bottom: 1px solid rgba(255,255,255,0.07); padding-bottom: 6px; }
+.modal-player-row { padding: 6px 10px; font-size: 14px; color: #e5e7eb; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; }
 .modal-player-row:hover { background: rgba(255,255,255,0.04); }
-.modal-close {
-  margin-top: 16px; background: #dc2626; width: 100%; padding: 10px;
-  border-radius: 8px; font-family: 'Rajdhani', sans-serif;
-  font-size: 15px; font-weight: 600; letter-spacing: 1px;
-}
-.match-result-card {
-  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 10px; padding: 14px 16px; margin-bottom: 10px;
-}
-.match-result-card .winner-row {
-  font-family: 'Rajdhani', sans-serif; font-size: 17px;
-  font-weight: 700; color: #6ee7b7; margin-bottom: 4px;
-}
-.match-result-card .detail-row {
-  font-family: 'Inter', sans-serif; font-size: 12px; color: #6b7280;
-}
-.no-results {
-  font-family: 'Inter', sans-serif; font-size: 14px;
-  color: #4b5563; text-align: center; padding: 20px 0;
-}
-.upcoming-card {
-  background: linear-gradient(145deg, #111827, #0f172a);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px; padding: 18px 20px; margin-bottom: 14px;
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
-  transition: border-color 0.2s, transform 0.2s;
-}
+.modal-close { margin-top: 16px; background: #dc2626; width: 100%; padding: 10px; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; }
+.match-result-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+.match-result-card .winner-row { font-family: 'Rajdhani', sans-serif; font-size: 17px; font-weight: 700; color: #6ee7b7; margin-bottom: 4px; }
+.match-result-card .detail-row { font-family: 'Inter', sans-serif; font-size: 12px; color: #6b7280; }
+.no-results { font-family: 'Inter', sans-serif; font-size: 14px; color: #4b5563; text-align: center; padding: 20px 0; }
+.upcoming-card { background: linear-gradient(145deg, #111827, #0f172a); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; transition: border-color 0.2s, transform 0.2s; }
 .upcoming-card:hover { border-color: rgba(37,99,235,0.35); transform: translateY(-2px); }
 .upcoming-vs { display: flex; align-items: center; gap: 14px; flex: 1; }
-.upcoming-team {
-  font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: #e5e7eb;
-}
-.upcoming-vs-badge {
-  background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.3);
-  border-radius: 6px; padding: 3px 10px; font-family: 'Rajdhani', sans-serif;
-  font-size: 13px; font-weight: 700; color: #93c5fd; letter-spacing: 1px;
-}
-.upcoming-date {
-  font-family: 'Inter', sans-serif; font-size: 12px; color: #6b7280;
-  display: flex; align-items: center; gap: 6px;
-}
-.upcoming-date .date-val {
-  background: rgba(255,255,255,0.05); border-radius: 6px; padding: 4px 10px;
-  color: #a7f3d0; font-weight: 500; font-size: 13px;
-}
+.upcoming-team { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: #e5e7eb; }
+.upcoming-vs-badge { background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.3); border-radius: 6px; padding: 3px 10px; font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; color: #93c5fd; letter-spacing: 1px; }
+.upcoming-date { font-family: 'Inter', sans-serif; font-size: 12px; color: #6b7280; display: flex; align-items: center; gap: 6px; }
+.upcoming-date .date-val { background: rgba(255,255,255,0.05); border-radius: 6px; padding: 4px 10px; color: #a7f3d0; font-weight: 500; font-size: 13px; }
 .upcoming-actions { display: flex; gap: 8px; align-items: center; }
-.btn-start-match {
-  background: linear-gradient(135deg, #16a34a, #15803d);
-  padding: 7px 16px; border-radius: 7px; font-family: 'Rajdhani', sans-serif;
-  font-size: 13px; font-weight: 700; letter-spacing: 1px; color: white;
-  border: none; cursor: pointer; transition: all 0.2s;
-}
+.btn-start-match { background: linear-gradient(135deg, #16a34a, #15803d); padding: 7px 16px; border-radius: 7px; font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1px; color: white; border: none; cursor: pointer; transition: all 0.2s; }
 .btn-start-match:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(22,163,74,0.4); }
-.btn-delete-upcoming {
-  background: rgba(220,38,38,0.15); border: 1px solid rgba(220,38,38,0.3);
-  color: #f87171; padding: 7px 10px; border-radius: 7px; font-size: 14px;
-  cursor: pointer; transition: all 0.2s;
-}
+.btn-delete-upcoming { background: rgba(220,38,38,0.15); border: 1px solid rgba(220,38,38,0.3); color: #f87171; padding: 7px 10px; border-radius: 7px; font-size: 14px; cursor: pointer; transition: all 0.2s; }
 .btn-delete-upcoming:hover { background: rgba(220,38,38,0.3); }
-.upcoming-section-header {
-  font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700;
-  color: #6ee7b7; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
-}
-.tab-row {
-  display: flex; gap: 8px; margin-bottom: 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.07); padding-bottom: 0;
-}
-.tab-btn {
-  padding: 10px 20px; background: transparent; border: none;
-  border-bottom: 2px solid transparent; color: #6b7280;
-  font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 600;
-  letter-spacing: 1px; cursor: pointer; border-radius: 0; transition: all 0.2s; margin-bottom: -1px;
-}
+.upcoming-section-header { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: #6ee7b7; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.tab-row { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.07); padding-bottom: 0; }
+.tab-btn { padding: 10px 20px; background: transparent; border: none; border-bottom: 2px solid transparent; color: #6b7280; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; cursor: pointer; border-radius: 0; transition: all 0.2s; margin-bottom: -1px; }
 .tab-btn.active { color: #6ee7b7; border-bottom-color: #6ee7b7; }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
-.upcoming-form-row {
-  display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 10px;
-}
+.upcoming-form-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 10px; }
 .upcoming-form-row select, .upcoming-form-row input[type="date"] { flex: 1; min-width: 140px; }
 .upcoming-form-row button { flex-shrink: 0; }
-#winPopupOverlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.85); z-index: 9999;
-  align-items: center; justify-content: center;
-}
+#winPopupOverlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; }
 #winPopupOverlay.open { display: flex; }
-.win-popup-box {
-  background: linear-gradient(145deg, #0f2718, #0a3d1f);
-  border: 2px solid #16a34a; border-radius: 24px; padding: 48px 40px;
-  width: 90%; max-width: 440px; text-align: center; position: relative;
-  box-shadow: 0 0 60px rgba(22,163,74,0.4), 0 25px 60px rgba(0,0,0,0.6);
-  animation: popupIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-@keyframes popupIn {
-  from { opacity: 0; transform: scale(0.7); }
-  to   { opacity: 1; transform: scale(1); }
-}
-.win-trophy {
-  font-size: 80px; line-height: 1; margin-bottom: 16px; display: block;
-  animation: trophyBounce 0.6s ease 0.3s both;
-}
-@keyframes trophyBounce {
-  0%   { transform: scale(0) rotate(-20deg); }
-  60%  { transform: scale(1.2) rotate(10deg); }
-  100% { transform: scale(1) rotate(0deg); }
-}
-.win-popup-title {
-  font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 600;
-  letter-spacing: 3px; text-transform: uppercase; color: #6ee7b7; margin-bottom: 10px;
-}
-.win-popup-team {
-  font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700;
-  color: #ffffff; margin-bottom: 8px; line-height: 1.1;
-}
-.win-popup-subtitle {
-  font-family: 'Inter', sans-serif; font-size: 15px; color: #a7f3d0; margin-bottom: 6px;
-}
-.win-popup-margin {
-  font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 600;
-  color: #fbbf24; margin-bottom: 28px;
-}
+.win-popup-box { background: linear-gradient(145deg, #0f2718, #0a3d1f); border: 2px solid #16a34a; border-radius: 24px; padding: 48px 40px; width: 90%; max-width: 440px; text-align: center; position: relative; box-shadow: 0 0 60px rgba(22,163,74,0.4), 0 25px 60px rgba(0,0,0,0.6); animation: popupIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes popupIn { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
+.win-trophy { font-size: 80px; line-height: 1; margin-bottom: 16px; display: block; animation: trophyBounce 0.6s ease 0.3s both; }
+@keyframes trophyBounce { 0% { transform: scale(0) rotate(-20deg); } 60% { transform: scale(1.2) rotate(10deg); } 100% { transform: scale(1) rotate(0deg); } }
+.win-popup-title { font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #6ee7b7; margin-bottom: 10px; }
+.win-popup-team { font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700; color: #ffffff; margin-bottom: 8px; line-height: 1.1; }
+.win-popup-subtitle { font-family: 'Inter', sans-serif; font-size: 15px; color: #a7f3d0; margin-bottom: 6px; }
+.win-popup-margin { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 600; color: #fbbf24; margin-bottom: 28px; }
 .win-confetti-row { font-size: 28px; margin-bottom: 24px; letter-spacing: 6px; }
-.win-popup-btn {
-  background: linear-gradient(135deg, #16a34a, #15803d);
-  border: none; border-radius: 10px; color: white;
-  font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  padding: 14px 40px; cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 4px 20px rgba(22,163,74,0.4);
-}
+.win-popup-btn { background: linear-gradient(135deg, #16a34a, #15803d); border: none; border-radius: 10px; color: white; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 40px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(22,163,74,0.4); }
 .win-popup-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(22,163,74,0.6); }
-#tossOverlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.88); z-index: 9998;
-  align-items: center; justify-content: center;
-}
+#tossOverlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 9998; align-items: center; justify-content: center; }
 #tossOverlay.open { display: flex; }
-.toss-box {
-  background: linear-gradient(145deg, #0f172a, #1e293b);
-  border: 2px solid #2563eb; border-radius: 24px; padding: 40px 36px;
-  width: 90%; max-width: 420px; text-align: center;
-  box-shadow: 0 0 60px rgba(37,99,235,0.3), 0 25px 60px rgba(0,0,0,0.6);
-  animation: popupIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.toss-title {
-  font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 600;
-  letter-spacing: 3px; text-transform: uppercase; color: #93c5fd; margin-bottom: 8px;
-}
-.toss-heading {
-  font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700;
-  color: #ffffff; margin-bottom: 24px;
-}
-.toss-coin {
-  font-size: 72px; line-height: 1; margin-bottom: 20px; display: block;
-  cursor: pointer; transition: transform 0.1s;
-  filter: drop-shadow(0 4px 16px rgba(250,204,21,0.5));
-}
+.toss-box { background: linear-gradient(145deg, #0f172a, #1e293b); border: 2px solid #2563eb; border-radius: 24px; padding: 40px 36px; width: 90%; max-width: 420px; text-align: center; box-shadow: 0 0 60px rgba(37,99,235,0.3), 0 25px 60px rgba(0,0,0,0.6); animation: popupIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.toss-title { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #93c5fd; margin-bottom: 8px; }
+.toss-heading { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; color: #ffffff; margin-bottom: 24px; }
+.toss-coin { font-size: 72px; line-height: 1; margin-bottom: 20px; display: block; cursor: pointer; transition: transform 0.1s; filter: drop-shadow(0 4px 16px rgba(250,204,21,0.5)); }
 .toss-coin:hover { transform: scale(1.1); }
 .toss-coin.spinning { animation: coinSpin 1s ease-in-out; }
-@keyframes coinSpin {
-  0%   { transform: rotateY(0deg) scale(1); }
-  25%  { transform: rotateY(180deg) scale(1.2); }
-  50%  { transform: rotateY(360deg) scale(1); }
-  75%  { transform: rotateY(540deg) scale(1.2); }
-  100% { transform: rotateY(720deg) scale(1); }
-}
-.toss-instruction {
-  font-family: 'Inter', sans-serif; font-size: 13px; color: #6b7280; margin-bottom: 24px;
-}
-.toss-teams-row {
-  display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;
-}
-.toss-team-btn {
-  padding: 10px 20px; border-radius: 10px; font-family: 'Rajdhani', sans-serif;
-  font-size: 15px; font-weight: 700; letter-spacing: 1px; cursor: pointer;
-  border: 2px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06);
-  color: #e5e7eb; transition: all 0.2s;
-}
+@keyframes coinSpin { 0% { transform: rotateY(0deg) scale(1); } 25% { transform: rotateY(180deg) scale(1.2); } 50% { transform: rotateY(360deg) scale(1); } 75% { transform: rotateY(540deg) scale(1.2); } 100% { transform: rotateY(720deg) scale(1); } }
+.toss-instruction { font-family: 'Inter', sans-serif; font-size: 13px; color: #6b7280; margin-bottom: 24px; }
+.toss-teams-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+.toss-team-btn { padding: 10px 20px; border-radius: 10px; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 1px; cursor: pointer; border: 2px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); color: #e5e7eb; transition: all 0.2s; }
 .toss-team-btn:hover { background: rgba(37,99,235,0.25); border-color: #3b82f6; color: #fff; }
 .toss-team-btn.selected { background: rgba(37,99,235,0.35); border-color: #2563eb; color: #fff; }
-.toss-result-box {
-  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: none;
-}
-.toss-result-winner {
-  font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700;
-  color: #fbbf24; margin-bottom: 4px;
-}
-.toss-result-sub {
-  font-family: 'Inter', sans-serif; font-size: 13px; color: #9ca3af; margin-bottom: 14px;
-}
+.toss-result-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: none; }
+.toss-result-winner { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: #fbbf24; margin-bottom: 4px; }
+.toss-result-sub { font-family: 'Inter', sans-serif; font-size: 13px; color: #9ca3af; margin-bottom: 14px; }
 .toss-choice-row { display: flex; gap: 10px; justify-content: center; }
-.toss-choice-btn {
-  padding: 9px 22px; border-radius: 8px; font-family: 'Rajdhani', sans-serif;
-  font-size: 14px; font-weight: 700; letter-spacing: 1px; cursor: pointer; border: none;
-  transition: all 0.2s;
-}
+.toss-choice-btn { padding: 9px 22px; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px; cursor: pointer; border: none; transition: all 0.2s; }
 .toss-choice-bat { background: linear-gradient(135deg, #16a34a, #15803d); color: white; }
 .toss-choice-bowl { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; }
 .toss-choice-btn:hover { transform: translateY(-2px); opacity: 0.9; }
-.toss-flip-btn {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  border: none; border-radius: 10px; color: white;
-  font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700;
-  letter-spacing: 1px; padding: 12px 32px; cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 4px 16px rgba(245,158,11,0.4); margin-top: 4px;
-}
+.toss-flip-btn { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 10px; color: white; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 1px; padding: 12px 32px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 16px rgba(245,158,11,0.4); margin-top: 4px; }
 .toss-flip-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245,158,11,0.5); }
 .toss-flip-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-#wicketOverlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.88); z-index: 9997;
-  align-items: center; justify-content: center;
-}
+#wicketOverlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 9997; align-items: center; justify-content: center; }
 #wicketOverlay.open { display: flex; }
-.wicket-box {
-  background: linear-gradient(145deg, #1a0a0a, #2d0f0f);
-  border: 2px solid #dc2626; border-radius: 24px; padding: 36px 32px;
-  width: 90%; max-width: 400px; text-align: center;
-  box-shadow: 0 0 60px rgba(220,38,38,0.35), 0 25px 60px rgba(0,0,0,0.6);
-  animation: popupIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.wicket-emoji {
-  font-size: 64px; line-height: 1; margin-bottom: 12px; display: block;
-  animation: wicketShake 0.5s ease;
-}
-@keyframes wicketShake {
-  0%,100% { transform: rotate(0deg); }
-  20%      { transform: rotate(-15deg); }
-  40%      { transform: rotate(15deg); }
-  60%      { transform: rotate(-10deg); }
-  80%      { transform: rotate(10deg); }
-}
-.wicket-title {
-  font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 600;
-  letter-spacing: 3px; text-transform: uppercase; color: #f87171; margin-bottom: 6px;
-}
-.wicket-heading {
-  font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700;
-  color: #ffffff; margin-bottom: 20px;
-}
-.wicket-label {
-  font-family: 'Inter', sans-serif; font-size: 13px; color: #9ca3af;
-  margin-bottom: 10px; text-align: left;
-}
-#wicketPlayerSelect {
-  width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(220,38,38,0.4); border-radius: 10px; color: #e5e7eb;
-  font-family: 'Inter', sans-serif; font-size: 14px; margin-bottom: 20px;
-  box-sizing: border-box; outline: none;
-}
+.wicket-box { background: linear-gradient(145deg, #1a0a0a, #2d0f0f); border: 2px solid #dc2626; border-radius: 24px; padding: 36px 32px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 0 60px rgba(220,38,38,0.35), 0 25px 60px rgba(0,0,0,0.6); animation: popupIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.wicket-emoji { font-size: 64px; line-height: 1; margin-bottom: 12px; display: block; animation: wicketShake 0.5s ease; }
+@keyframes wicketShake { 0%,100% { transform: rotate(0deg); } 20% { transform: rotate(-15deg); } 40% { transform: rotate(15deg); } 60% { transform: rotate(-10deg); } 80% { transform: rotate(10deg); } }
+.wicket-title { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #f87171; margin-bottom: 6px; }
+.wicket-heading { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: #ffffff; margin-bottom: 20px; }
+.wicket-label { font-family: 'Inter', sans-serif; font-size: 13px; color: #9ca3af; margin-bottom: 10px; text-align: left; }
+#wicketPlayerSelect { width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(220,38,38,0.4); border-radius: 10px; color: #e5e7eb; font-family: 'Inter', sans-serif; font-size: 14px; margin-bottom: 20px; box-sizing: border-box; outline: none; }
 #wicketPlayerSelect:focus { border-color: #dc2626; }
-.wicket-confirm-btn {
-  width: 100%; padding: 13px;
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-  border: none; border-radius: 10px; color: white;
-  font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
-  transition: all 0.2s; box-shadow: 0 4px 20px rgba(220,38,38,0.35);
-}
+.wicket-confirm-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, #dc2626, #b91c1c); border: none; border-radius: 10px; color: white; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(220,38,38,0.35); }
 .wicket-confirm-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(220,38,38,0.5); }
-#playerProfileModal {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.82); z-index: 9996;
-  align-items: center; justify-content: center;
-}
+#playerProfileModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.82); z-index: 9996; align-items: center; justify-content: center; }
 #playerProfileModal.open { display: flex; }
-.profile-box {
-  background: linear-gradient(145deg, #0f172a, #1e293b);
-  border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 32px 28px;
-  width: 90%; max-width: 460px; max-height: 85vh; overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  animation: popupIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.profile-header {
-  display: flex; align-items: center; gap: 18px; margin-bottom: 24px;
-  padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-.profile-avatar {
-  width: 70px; height: 70px; border-radius: 50%;
-  background: linear-gradient(135deg, #1d4ed8, #065f46);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 32px; flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-}
-.profile-name {
-  font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700;
-  color: #ffffff; margin: 0 0 4px;
-}
-.profile-team {
-  font-family: 'Inter', sans-serif; font-size: 12px; color: #6b7280;
-  letter-spacing: 0.5px;
-}
-.profile-stats-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px;
-}
-.profile-stat-box {
-  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 10px; padding: 14px 10px; text-align: center;
-}
-.profile-stat-val {
-  font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700;
-  color: #6ee7b7; line-height: 1;
-}
-.profile-stat-lbl {
-  font-family: 'Inter', sans-serif; font-size: 10px; color: #4b5563;
-  text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;
-}
-.profile-section-title {
-  font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 600;
-  letter-spacing: 2px; text-transform: uppercase; color: #4b5563; margin-bottom: 10px;
-}
-.profile-match-row {
-  background: rgba(255,255,255,0.03); border-radius: 8px;
-  padding: 10px 12px; margin-bottom: 6px;
-  font-family: 'Inter', sans-serif; font-size: 13px; color: #9ca3af;
-  display: flex; justify-content: space-between; align-items: center;
-}
+.profile-box { background: linear-gradient(145deg, #0f172a, #1e293b); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 32px 28px; width: 90%; max-width: 460px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.6); animation: popupIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.profile-header { display: flex; align-items: center; gap: 18px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.profile-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #1d4ed8, #065f46); display: flex; align-items: center; justify-content: center; font-size: 32px; flex-shrink: 0; box-shadow: 0 4px 16px rgba(0,0,0,0.4); overflow: hidden; }
+.profile-name { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: #ffffff; margin: 0 0 4px; }
+.profile-team { font-family: 'Inter', sans-serif; font-size: 12px; color: #6b7280; letter-spacing: 0.5px; }
+.profile-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.profile-stat-box { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 10px; text-align: center; }
+.profile-stat-val { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700; color: #6ee7b7; line-height: 1; }
+.profile-stat-lbl { font-family: 'Inter', sans-serif; font-size: 10px; color: #4b5563; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+.profile-section-title { font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #4b5563; margin-bottom: 10px; }
+.profile-match-row { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; font-family: 'Inter', sans-serif; font-size: 13px; color: #9ca3af; display: flex; justify-content: space-between; align-items: center; }
 .profile-match-score { color: #e5e7eb; font-weight: 500; }
-.profile-no-matches {
-  font-family: 'Inter', sans-serif; font-size: 13px; color: #374151;
-  text-align: center; padding: 16px 0;
-}
-.profile-close-btn {
-  width: 100%; margin-top: 20px; padding: 11px;
-  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 10px; color: #9ca3af; font-family: 'Rajdhani', sans-serif;
-  font-size: 15px; font-weight: 600; letter-spacing: 1px; cursor: pointer;
-  transition: all 0.2s;
-}
+.profile-no-matches { font-family: 'Inter', sans-serif; font-size: 13px; color: #374151; text-align: center; padding: 16px 0; }
+.profile-close-btn { width: 100%; margin-top: 20px; padding: 11px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #9ca3af; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
 .profile-close-btn:hover { background: rgba(255,255,255,0.1); color: #e5e7eb; }
-.btn-profile {
-  background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.3);
-  color: #93c5fd; padding: 3px 10px; border-radius: 6px;
-  font-size: 11px; font-family: 'Inter', sans-serif; cursor: pointer;
-  transition: all 0.2s; white-space: nowrap;
-}
+.btn-profile { background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.3); color: #93c5fd; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
 .btn-profile:hover { background: rgba(37,99,235,0.4); }
-.btn-view-profile {
-  background: transparent; border: none; color: #6ee7b7;
-  font-size: 11px; cursor: pointer; padding: 2px 6px;
-  text-decoration: underline; font-family: 'Inter', sans-serif;
-}
-#oversOverlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.88); z-index: 9995;
-  align-items: center; justify-content: center;
-}
+.btn-view-profile { background: transparent; border: none; color: #6ee7b7; font-size: 11px; cursor: pointer; padding: 2px 6px; text-decoration: underline; font-family: 'Inter', sans-serif; }
+.photo-upload-btn { background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.3); color: #93c5fd; padding: 6px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+.photo-upload-btn:hover { background: rgba(37,99,235,0.4); }
+#oversOverlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 9995; align-items: center; justify-content: center; }
 #oversOverlay.open { display: flex; }
-.overs-box {
-  background: linear-gradient(145deg, #0f172a, #1a2744);
-  border: 2px solid #f59e0b; border-radius: 24px; padding: 40px 36px;
-  width: 90%; max-width: 380px; text-align: center;
-  box-shadow: 0 0 60px rgba(245,158,11,0.25), 0 25px 60px rgba(0,0,0,0.6);
-  animation: popupIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.overs-title {
-  font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 600;
-  letter-spacing: 3px; text-transform: uppercase; color: #fbbf24; margin-bottom: 8px;
-}
-.overs-heading {
-  font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700;
-  color: #ffffff; margin-bottom: 6px;
-}
-.overs-sub {
-  font-family: 'Inter', sans-serif; font-size: 13px; color: #6b7280; margin-bottom: 28px;
-}
-.overs-quick-row {
-  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;
-}
-.overs-quick-btn {
-  padding: 10px 16px; border-radius: 10px; font-family: 'Rajdhani', sans-serif;
-  font-size: 16px; font-weight: 700; cursor: pointer;
-  border: 2px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06);
-  color: #e5e7eb; transition: all 0.2s; min-width: 50px;
-}
+.overs-box { background: linear-gradient(145deg, #0f172a, #1a2744); border: 2px solid #f59e0b; border-radius: 24px; padding: 40px 36px; width: 90%; max-width: 380px; text-align: center; box-shadow: 0 0 60px rgba(245,158,11,0.25), 0 25px 60px rgba(0,0,0,0.6); animation: popupIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.overs-title { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #fbbf24; margin-bottom: 8px; }
+.overs-heading { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: #ffffff; margin-bottom: 6px; }
+.overs-quick-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+.overs-quick-btn { padding: 10px 16px; border-radius: 10px; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; border: 2px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); color: #e5e7eb; transition: all 0.2s; min-width: 50px; }
 .overs-quick-btn:hover { background: rgba(245,158,11,0.25); border-color: #f59e0b; color: #fff; }
 .overs-quick-btn.selected { background: rgba(245,158,11,0.3); border-color: #f59e0b; color: #fbbf24; }
-.overs-custom-row {
-  display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 24px;
-}
-.overs-custom-row label {
-  font-family: 'Inter', sans-serif; font-size: 13px; color: #6b7280;
-}
-#customOversInput {
-  width: 80px; text-align: center; font-family: 'Rajdhani', sans-serif;
-  font-size: 20px; font-weight: 700; padding: 8px 10px;
-  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 8px; color: #fff; outline: none;
-}
+.overs-custom-row { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 24px; }
+.overs-custom-row label { font-family: 'Inter', sans-serif; font-size: 13px; color: #6b7280; }
+#customOversInput { width: 80px; text-align: center; font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; padding: 8px 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: #fff; outline: none; }
 #customOversInput:focus { border-color: #f59e0b; }
-.overs-confirm-btn {
-  width: 100%; padding: 14px;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  border: none; border-radius: 10px; color: #000;
-  font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
-  transition: all 0.2s; box-shadow: 0 4px 20px rgba(245,158,11,0.35);
-}
+.overs-confirm-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 10px; color: #000; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245,158,11,0.35); }
 .overs-confirm-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(245,158,11,0.5); }
-.overs-info-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.25);
-  border-radius: 8px; padding: 4px 12px;
-  font-family: 'Rajdhani', sans-serif; font-size: 13px; color: #fbbf24;
-  margin-bottom: 10px;
-}
-@media (max-width: 600px) {
-  nav { display: flex !important; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 6px; padding: 10px 12px; justify-content: flex-start; scrollbar-width: none; }
-  nav::-webkit-scrollbar { display: none; }
-  nav button { flex-shrink: 0; padding: 9px 14px; font-size: 13px; border-radius: 20px; white-space: nowrap; }
-}
+.overs-info-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.25); border-radius: 8px; padding: 4px 12px; font-family: 'Rajdhani', sans-serif; font-size: 13px; color: #fbbf24; margin-bottom: 10px; }
+@media (max-width: 600px) { nav { display: flex !important; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 6px; padding: 10px 12px; justify-content: flex-start; scrollbar-width: none; } nav::-webkit-scrollbar { display: none; } nav button { flex-shrink: 0; padding: 9px 14px; font-size: 13px; border-radius: 20px; white-space: nowrap; } }
 @media (max-width: 600px) { .page { padding: 14px 12px; } .section { padding: 12px; } }
 @media (max-width: 480px) { .auth-card { padding: 32px 20px; border-radius: 14px; margin: 16px; width: auto; } .auth-logo h1 { font-size: 20px; } }
 @media (max-width: 600px) { .cricket-banner { min-height: 160px; border-radius: 12px; margin-bottom: 18px; } .banner-content { padding: 24px 20px; } .banner-title { font-size: 26px; } .banner-sub { font-size: 12px; margin-bottom: 16px; } .banner-btn-primary, .banner-btn-secondary { padding: 9px 16px; font-size: 12px; } }
@@ -670,19 +247,11 @@ html, body { overflow-x: hidden; }
       <p>Scoring Management</p>
     </div>
     <h2 id="authTitle">Welcome Back</h2>
-    <div class="auth-field">
-      <span class="field-icon">👤</span>
-      <input id="username" placeholder="Enter username">
-    </div>
-    <div class="auth-field">
-      <span class="field-icon">🔒</span>
-      <input id="password" type="password" placeholder="Enter password">
-    </div>
+    <div class="auth-field"><span class="field-icon">👤</span><input id="username" placeholder="Enter username"></div>
+    <div class="auth-field"><span class="field-icon">🔒</span><input id="password" type="password" placeholder="Enter password"></div>
     <button class="auth-btn" onclick="authenticate()" id="authBtn">LOGIN</button>
     <div class="auth-divider"><span>or</span></div>
-    <div class="auth-switch">
-      <span id="switchText" onclick="toggleAuth()">Don't have an account? Register</span>
-    </div>
+    <div class="auth-switch"><span id="switchText" onclick="toggleAuth()">Don't have an account? Register</span></div>
   </div>
 </div>
 <div id="home" class="page">
@@ -711,7 +280,45 @@ html, body { overflow-x: hidden; }
 <div id="winPopupOverlay"><div class="win-popup-box"><span class="win-trophy">🏆</span><div class="win-confetti-row">🎉 🎊 🎉</div><div class="win-popup-title">Match Winner</div><div class="win-popup-team" id="winTeamName">—</div><div class="win-popup-subtitle">won the match</div><div class="win-popup-margin" id="winMarginText">—</div><button class="win-popup-btn" onclick="closeWinPopup()">Done</button></div></div>
 <div id="tossOverlay"><div class="toss-box"><div class="toss-title">🪙 Coin Toss</div><div class="toss-heading">Who calls the toss?</div><div class="toss-teams-row"><button class="toss-team-btn" id="tossBtnTeam1" onclick="selectTossTeam(0)"></button><button class="toss-team-btn" id="tossBtnTeam2" onclick="selectTossTeam(1)"></button></div><span class="toss-coin" id="tossCoin" onclick="flipCoin()">🪙</span><div class="toss-instruction" id="tossInstruction">Select a team, then flip the coin</div><button class="toss-flip-btn" id="tossFlipBtn" onclick="flipCoin()" disabled>Flip Coin 🪙</button><div class="toss-result-box" id="tossResultBox"><div class="toss-result-winner" id="tossWinnerText">—</div><div class="toss-result-sub" id="tossResultSub">won the toss! Choose to:</div><div class="toss-choice-row"><button class="toss-choice-btn toss-choice-bat" onclick="tossChoice('bat')">🏏 Bat First</button><button class="toss-choice-btn toss-choice-bowl" onclick="tossChoice('bowl')">🎳 Bowl First</button></div></div></div></div>
 <div id="wicketOverlay"><div class="wicket-box"><span class="wicket-emoji">🎯</span><div class="wicket-title">Wicket!</div><div class="wicket-heading">Who got Out?</div><div class="wicket-label">Select the batsman who is out:</div><select id="wicketPlayerSelect"></select><button class="wicket-confirm-btn" onclick="confirmWicket()">Confirm Out ❌</button></div></div>
-<div id="playerProfileModal"><div class="profile-box"><div class="profile-header"><div class="profile-avatar" id="profileAvatar">🏏</div><div><div class="profile-name" id="profileName">—</div><div id="profileRoleBadge"></div><div class="profile-team" id="profileTeam">—</div></div></div><div class="profile-section-title">🏏 Batting Stats</div><div class="profile-stats-grid" id="profileBatStats"><div class="profile-stat-box"><div class="profile-stat-val" id="pRuns">0</div><div class="profile-stat-lbl">Runs</div></div><div class="profile-stat-box"><div class="profile-stat-val" id="pBalls">0</div><div class="profile-stat-lbl">Balls</div></div><div class="profile-stat-box"><div class="profile-stat-val" id="pSR">0</div><div class="profile-stat-lbl">Strike Rate</div></div><div class="profile-stat-box"><div class="profile-stat-val" id="pFours">0</div><div class="profile-stat-lbl">4s</div></div><div class="profile-stat-box"><div class="profile-stat-val" id="pSixes">0</div><div class="profile-stat-lbl">6s</div></div><div class="profile-stat-box"><div class="profile-stat-val" id="pHS">0</div><div class="profile-stat-lbl">Highest</div></div></div><div class="profile-section-title" style="margin-top:16px;">🎳 Bowling Stats</div><div class="profile-stats-grid"><div class="profile-stat-box"><div class="profile-stat-val" id="pWickets">0</div><div class="profile-stat-lbl">Wickets</div></div><div class="profile-stat-box"><div class="profile-stat-val" id="pOvers">0</div><div class="profile-stat-lbl">Overs</div></div><div class="profile-stat-box"><div class="profile-stat-val" id="pEco">0</div><div class="profile-stat-lbl">Economy</div></div></div><div class="profile-section-title" style="margin-top:16px;">📋 Match History</div><div id="profileMatchHistory"></div><button class="profile-close-btn" onclick="closePlayerProfile()">Close</button></div></div>
+
+<!-- Player Profile Modal — Photo Upload Added -->
+<div id="playerProfileModal">
+  <div class="profile-box">
+    <div class="profile-header">
+      <div class="profile-avatar" id="profileAvatar">🏏</div>
+      <div>
+        <div class="profile-name" id="profileName">—</div>
+        <div id="profileRoleBadge"></div>
+        <div class="profile-team" id="profileTeam">—</div>
+      </div>
+    </div>
+    <!-- Photo Upload Button -->
+    <div style="text-align:center;margin-bottom:16px;">
+      <input type="file" id="photoUploadInput" accept="image/*" style="display:none;" onchange="uploadPlayerPhoto()">
+      <button class="photo-upload-btn" onclick="document.getElementById('photoUploadInput').click()">📷 Upload Photo</button>
+      <span id="photoUploadStatus" style="font-size:12px;color:#6b7280;margin-left:8px;"></span>
+    </div>
+    <div class="profile-section-title">🏏 Batting Stats</div>
+    <div class="profile-stats-grid" id="profileBatStats">
+      <div class="profile-stat-box"><div class="profile-stat-val" id="pRuns">0</div><div class="profile-stat-lbl">Runs</div></div>
+      <div class="profile-stat-box"><div class="profile-stat-val" id="pBalls">0</div><div class="profile-stat-lbl">Balls</div></div>
+      <div class="profile-stat-box"><div class="profile-stat-val" id="pSR">0</div><div class="profile-stat-lbl">Strike Rate</div></div>
+      <div class="profile-stat-box"><div class="profile-stat-val" id="pFours">0</div><div class="profile-stat-lbl">4s</div></div>
+      <div class="profile-stat-box"><div class="profile-stat-val" id="pSixes">0</div><div class="profile-stat-lbl">6s</div></div>
+      <div class="profile-stat-box"><div class="profile-stat-val" id="pHS">0</div><div class="profile-stat-lbl">Highest</div></div>
+    </div>
+    <div class="profile-section-title" style="margin-top:16px;">🎳 Bowling Stats</div>
+    <div class="profile-stats-grid">
+      <div class="profile-stat-box"><div class="profile-stat-val" id="pWickets">0</div><div class="profile-stat-lbl">Wickets</div></div>
+      <div class="profile-stat-box"><div class="profile-stat-val" id="pOvers">0</div><div class="profile-stat-lbl">Overs</div></div>
+      <div class="profile-stat-box"><div class="profile-stat-val" id="pEco">0</div><div class="profile-stat-lbl">Economy</div></div>
+    </div>
+    <div class="profile-section-title" style="margin-top:16px;">📋 Match History</div>
+    <div id="profileMatchHistory"></div>
+    <button class="profile-close-btn" onclick="closePlayerProfile()">Close</button>
+  </div>
+</div>
+
 <div id="oversOverlay"><div class="overs-box"><div class="overs-title">⚙️ Match Setup</div><div class="overs-heading"> Set Overs</div><div class="overs-quick-row"><button class="overs-quick-btn" onclick="selectOvers(5)">5</button><button class="overs-quick-btn" onclick="selectOvers(10)">10</button><button class="overs-quick-btn" onclick="selectOvers(15)">15</button><button class="overs-quick-btn" onclick="selectOvers(20)">20</button></div><div class="overs-custom-row"><label>Custom:</label><input type="number" id="customOversInput" min="1" max="50" placeholder="—" oninput="customOversChanged()"><label>Overs</label></div><button class="overs-confirm-btn" onclick="confirmOvers()">✅ Confirm & Start</button></div></div>
 <div id="teams" class="page">
   <h2>Teams</h2>
@@ -796,6 +403,7 @@ html, body { overflow-x: hidden; }
 <script>
 const API = "https://harsha-kcp.onrender.com";
 let isLogin = true;
+let currentProfilePlayerName = "";
 let matchBatTeam = "", matchBowlTeam = "";
 let tossTeams = [];
 let tossCallingTeamIndex = -1;
@@ -825,7 +433,11 @@ function showWinPopup(winner, margin) {
   document.getElementById("winMarginText").innerText = margin;
   document.getElementById("winPopupOverlay").classList.add("open");
 }
-function closeWinPopup() { document.getElementById("winPopupOverlay").classList.remove("open"); location.reload(); }
+function closeWinPopup() {
+  document.getElementById("winPopupOverlay").classList.remove("open");
+  showPage("home");
+  loadDashboardStats();
+}
 function toggleAuth() {
   isLogin = !isLogin;
   authTitle.innerText = isLogin ? "Welcome Back" : "Create Account";
@@ -836,10 +448,7 @@ function authenticate() {
   let u = username.value.trim(), p = password.value.trim();
   if (!u || !p) return alert("enter username & password");
   if (isLogin) {
-    fetch(API + "/login", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: u, password: p })
-    })
+    fetch(API + "/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username: u, password: p }) })
     .then(res => res.json())
     .then(data => {
       if (data.success) { localStorage.setItem("currentUser", u); startApp(); }
@@ -849,10 +458,7 @@ function authenticate() {
     })
     .catch(() => { localStorage.setItem("currentUser", u); startApp(); });
   } else {
-    fetch(API + "/register", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: u, password: p })
-    })
+    fetch(API + "/register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username: u, password: p }) })
     .then(res => res.json())
     .then(data => {
       if (data.message === "Already Registered") alert("Already Registered");
@@ -882,15 +488,10 @@ function switchTab(tab) {
   document.getElementById("tab-" + tab).classList.add("active");
 }
 function loadUpcomingTeamDropdowns() {
-  fetch(API + "/teams", { cache: "no-store" })
-  .then(res => res.json())
-  .then(data => {
+  fetch(API + "/teams", { cache: "no-store" }).then(res => res.json()).then(data => {
     let t1 = document.getElementById("upTeam1"), t2 = document.getElementById("upTeam2");
     t1.innerHTML = ""; t2.innerHTML = "";
-    data.forEach(t => {
-      t1.innerHTML += '<option value="' + t.team_name + '">' + t.team_name + '</option>';
-      t2.innerHTML += '<option value="' + t.team_name + '">' + t.team_name + '</option>';
-    });
+    data.forEach(t => { t1.innerHTML += '<option value="' + t.team_name + '">' + t.team_name + '</option>'; t2.innerHTML += '<option value="' + t.team_name + '">' + t.team_name + '</option>'; });
     if (data.length >= 2) t2.value = data[1].team_name;
   }).catch(() => {});
 }
@@ -899,18 +500,11 @@ function scheduleUpcomingMatch() {
   if (!t1 || !t2) return alert("Select both teams");
   if (t1 === t2) return alert("Select different teams");
   if (!d) return alert("Select match date");
-  fetch(API + "/upcoming-matches", {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ team1: t1, team2: t2, match_date: d })
-  }).then(() => { document.getElementById("upMatchDate").value = ""; loadUpcomingMatches(); }).catch(() => {});
+  fetch(API + "/upcoming-matches", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ team1: t1, team2: t2, match_date: d }) }).then(() => { document.getElementById("upMatchDate").value = ""; loadUpcomingMatches(); }).catch(() => {});
 }
-function deleteUpcomingMatch(id) {
-  fetch(API + "/upcoming-matches/" + id, { method: "DELETE" }).then(() => loadUpcomingMatches()).catch(() => {});
-}
+function deleteUpcomingMatch(id) { fetch(API + "/upcoming-matches/" + id, { method: "DELETE" }).then(() => loadUpcomingMatches()).catch(() => {}); }
 function loadUpcomingMatches() {
-  fetch(API + "/upcoming-matches", { cache: "no-store" })
-  .then(res => res.json())
-  .then(arr => {
+  fetch(API + "/upcoming-matches", { cache: "no-store" }).then(res => res.json()).then(arr => {
     let container = document.getElementById("upcomingList");
     if (arr.length === 0) { container.innerHTML = "<div class='no-results'>No upcoming matches scheduled.</div>"; return; }
     arr.sort((a, b) => new Date(a.match_date) - new Date(b.match_date));
@@ -923,15 +517,11 @@ function loadUpcomingMatches() {
   }).catch(() => {});
 }
 function startFromUpcoming(team1, team2, id) {
-  deleteUpcomingMatch(id);
-  switchTab("create");
+  deleteUpcomingMatch(id); switchTab("create");
   fetch(API + "/teams", { cache: "no-store" }).then(res => res.json()).then(data => {
     let batSel = document.getElementById("batTeam"), bowlSel = document.getElementById("bowlTeam");
     batSel.innerHTML = ""; bowlSel.innerHTML = "";
-    data.forEach(t => {
-      batSel.innerHTML += '<option value="' + t.team_name + '">' + t.team_name + '</option>';
-      bowlSel.innerHTML += '<option value="' + t.team_name + '">' + t.team_name + '</option>';
-    });
+    data.forEach(t => { batSel.innerHTML += '<option value="' + t.team_name + '">' + t.team_name + '</option>'; bowlSel.innerHTML += '<option value="' + t.team_name + '">' + t.team_name + '</option>'; });
     batSel.value = team1; bowlSel.value = team2;
     loadPlayersForMatch("bat"); loadPlayersForMatch("bowl");
   });
@@ -992,10 +582,23 @@ async function updateAllPlayerStatsAfterMatch() {
 async function openPlayerProfile(playerName, teamName, role) {
   document.getElementById("allPlayersModal").classList.remove("open");
   document.getElementById("playerProfileModal").classList.add("open");
-  document.getElementById("profileAvatar").innerText = roleEmoji(role);
+  currentProfilePlayerName = playerName;
+  document.getElementById("photoUploadStatus").innerText = "";
+  document.getElementById("photoUploadInput").value = "";
+
+  // Set default avatar with emoji
+  document.getElementById("profileAvatar").innerHTML = '<span style="font-size:32px;">' + roleEmoji(role) + '</span>';
   document.getElementById("profileName").innerText = playerName;
   document.getElementById("profileRoleBadge").innerHTML = roleBadge(role);
   document.getElementById("profileTeam").innerText = "🏏 " + teamName;
+
+  // Load existing photo if any
+  fetch(API + "/player-photo/" + encodeURIComponent(playerName)).then(r => r.json()).then(d => {
+    if (d.photo_url) {
+      document.getElementById("profileAvatar").innerHTML = '<img src="' + d.photo_url + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+    }
+  }).catch(() => {});
+
   ["pRuns","pBalls","pSR","pFours","pSixes","pHS","pWickets","pOvers","pEco"].forEach(id => document.getElementById(id).innerText = "...");
   document.getElementById("profileMatchHistory").innerHTML = "<div class='profile-no-matches'>⏳ Loading...</div>";
   try {
@@ -1025,6 +628,29 @@ async function openPlayerProfile(playerName, teamName, role) {
   }
 }
 function closePlayerProfile() { document.getElementById("playerProfileModal").classList.remove("open"); }
+
+async function uploadPlayerPhoto() {
+  let file = document.getElementById("photoUploadInput").files[0];
+  if (!file) return;
+  document.getElementById("photoUploadStatus").innerText = "⏳ Uploading...";
+  let formData = new FormData();
+  formData.append("photo", file);
+  formData.append("player_name", currentProfilePlayerName);
+  try {
+    let res = await fetch(API + "/upload-photo", { method: "POST", body: formData });
+    let data = await res.json();
+    if (data.success) {
+      document.getElementById("profileAvatar").innerHTML = '<img src="' + data.url + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+      document.getElementById("photoUploadStatus").innerText = "✅ Uploaded!";
+    } else {
+      document.getElementById("photoUploadStatus").innerText = "❌ Failed: " + (data.error || "Unknown error");
+    }
+  } catch(e) {
+    document.getElementById("photoUploadStatus").innerText = "❌ Error uploading";
+    console.error("Upload error:", e);
+  }
+}
+
 function selectOvers(val) {
   selectedOversVal = val;
   document.getElementById("customOversInput").value = val;
@@ -1279,16 +905,12 @@ function saveMatchResult(winner, loser, winType, margin) {
   fetch(API + "/points-table/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winner, loser, winner_runs: winnerRuns, winner_overs: winnerOvers, loser_runs: loserRuns, loser_overs: loserOvers }) }).catch(() => {});
 }
 function loadPointsTable() {
-  fetch(API + "/points-table", { cache: "no-store" })
-  .then(res => res.json())
-  .then(data => {
+  fetch(API + "/points-table", { cache: "no-store" }).then(res => res.json()).then(data => {
     let tbody = document.getElementById("pointsTableBody");
     if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="color:#4b5563;text-align:center;padding:20px;">No matches played yet</td></tr>'; return; }
     tbody.innerHTML = data.map((t, i) => {
       let nrr = 0;
-      if (t.overs_faced > 0 && t.overs_bowled > 0) {
-        nrr = (t.runs_scored / t.overs_faced) - (t.runs_conceded / t.overs_bowled);
-      }
+      if (t.overs_faced > 0 && t.overs_bowled > 0) { nrr = (t.runs_scored / t.overs_faced) - (t.runs_conceded / t.overs_bowled); }
       let nrrStr = (nrr >= 0 ? "+" : "") + nrr.toFixed(3);
       return '<tr><td>' + (i+1) + '</td><td>' + t.team_name + '</td><td>' + t.matches_played + '</td><td>' + t.wins + '</td><td>' + t.losses + '</td><td><b style="color:#6ee7b7;">' + t.points + '</b></td><td style="color:' + (nrr >= 0 ? "#6ee7b7" : "#f87171") + ';">' + nrrStr + '</td></tr>';
     }).join("");
