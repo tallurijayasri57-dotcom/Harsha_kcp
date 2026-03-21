@@ -8,7 +8,7 @@ const multer = require("multer");
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME || "das4ixee0",
     api_key: process.env.CLOUDINARY_API_KEY || "257379219351122",
-    api_secret: process.env.CLOUDINARY_API_SECRET || "7kqK84VNi8Soby13w5"
+    api_secret: process.env.CLOUDINARY_API_SECRET || "7kqK84VNi8Soby13w5ydIspW7oE"
 });
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
