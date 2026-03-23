@@ -606,11 +606,11 @@ async function updateAllPlayerStatsAfterMatch() {
   const saves = [];
   for (let p in batsmanStats) {
     let s = batsmanStats[p];
-    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBatTeam, match_date: today, match_type: "bat", runs: s.runs, balls_faced: s.balls, fours: s.fours, sixes: s.sixes, dismissal_type: s.dismissal_type || null, dismissed_by: s.dismissal_type === "Bowled" ? s.dismissed_by : (s.dismissed_by && s.dismissed_by_bowler ? s.dismissed_by + " b " + s.dismissed_by_bowler : s.dismissed_by) || null }) }).catch(e => console.error("Bat stats save error:", e)));
+    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBatTeam, match_date: today, match_type: "bat", runs: s.runs, balls_faced: s.balls, fours: s.fours, sixes: s.sixes, dismissal_type: s.dismissal_type || null, dismissed_by: s.dismissal_type === "Bowled" ? s.dismissed_by : (s.dismissed_by && s.dismissed_by_bowler ? s.dismissed_by + " b " + s.dismissed_by_bowler : s.dismissed_by) || null, match_id: currentMatchId }) }).catch(e => console.error("Bat stats save error:", e)));
   }
   for (let p in bowlerStats) {
     let s = bowlerStats[p];
-    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBowlTeam, match_date: today, match_type: "bowl", wickets: s.wickets, overs_bowled: Math.floor(s.balls / 6) + "." + (s.balls % 6), runs_conceded: s.runs, catches: s.catches || 0, run_outs: s.run_outs || 0, stumpings: s.stumpings || 0 }) }).catch(e => console.error("Bowl stats save error:", e)));
+    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBowlTeam, match_date: today, match_type: "bowl", wickets: s.wickets, overs_bowled: Math.floor(s.balls / 6) + "." + (s.balls % 6), runs_conceded: s.runs, catches: s.catches || 0, run_outs: s.run_outs || 0, stumpings: s.stumpings || 0, match_id: currentMatchId }) }).catch(e => console.error("Bowl stats save error:", e)));
   }
   await Promise.all(saves);
 }
@@ -1023,9 +1023,14 @@ function switchInnings() {
     alert("Second Innings! Target: " + target);
   } else { alert("Already in Second Innings"); }
 }
+let currentMatchId = null;
+
 function saveMatchResult(winner, loser, winType, margin) {
   let today = new Date().toLocaleDateString("en-IN");
-  fetch(API + "/match-results", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winner, loser, win_type: winType, margin, played_on: today }) }).catch(() => {});
+  fetch(API + "/match-results", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winner, loser, win_type: winType, margin, played_on: today }) })
+  .then(res => res.json())
+  .then(data => { currentMatchId = data.id || null; })
+  .catch(() => {});
   let winnerRuns = totalRuns, winnerOvers = parseFloat(Math.floor(ballCount/6) + "." + (ballCount%6));
   let loserRuns = target > 0 ? target - 1 : 0, loserOvers = parseFloat(Math.floor(totalOvers*6/6) + "." + 0);
   fetch(API + "/points-table/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winner, loser, winner_runs: winnerRuns, winner_overs: winnerOvers, loser_runs: loserRuns, loser_overs: loserOvers }) }).catch(() => {});
@@ -1045,7 +1050,7 @@ function loadFinishedMatches() {
             <div class="finished-match-winner">🏆 ${m.winner} won</div>
             <div class="finished-match-detail">vs ${m.loser} &nbsp;·&nbsp; ${m.win_type} by ${m.margin} &nbsp;·&nbsp; ${m.played_on}</div>
           </div>
-          <button class="finished-match-toggle" onclick="toggleScorecard(${i}, '${escapeQ(m.winner)}', '${escapeQ(m.loser)}', '${escapeQ(m.played_on)}')">View Scorecard</button>
+          <button class="finished-match-toggle" onclick="toggleScorecard(${i}, '${escapeQ(m.winner)}', '${escapeQ(m.loser)}', ${m.id})">View Scorecard</button>
         </div>
         <div class="finished-scorecard" id="scorecard-${i}">
           <div style="color:#6b7280;font-size:13px;text-align:center;">Loading scorecard...</div>
@@ -1056,22 +1061,16 @@ function loadFinishedMatches() {
   }).catch(() => { container.innerHTML = "<div class='no-results'>Could not load matches.</div>"; });
 }
 
-function toggleScorecard(index, winner, loser, playedOn) {
+function toggleScorecard(index, winner, loser, matchId) {
   let sc = document.getElementById("scorecard-" + index);
   if (sc.classList.contains("open")) { sc.classList.remove("open"); return; }
   sc.classList.add("open");
-  // Load player stats for both teams on this date
-  let dateStr = playedOn;
-  // Convert date format if needed
-  Promise.all([
-    fetch(API + "/match-results", { cache: "no-store" }).then(r => r.json()),
-    fetch(API + "/player-stats-by-match?winner=" + encodeURIComponent(winner) + "&loser=" + encodeURIComponent(loser), { cache: "no-store" }).then(r => r.json()).catch(() => null)
-  ]).then(([results, stats]) => {
-    if (!stats) {
-      sc.innerHTML = `<div style="color:#6b7280;font-size:13px;text-align:center;padding:10px;">
-        <div class="finished-team-title">🏆 ${winner} won vs ${loser}</div>
-        <div style="color:#4b5563;font-size:12px;">Detailed scorecard available for matches played after the update.</div>
-      </div>`;
+  sc.innerHTML = "<div style='color:#6b7280;font-size:13px;text-align:center;padding:10px;'>⏳ Loading scorecard...</div>";
+  fetch(API + "/player-stats-by-match?match_id=" + matchId, { cache: "no-store" })
+  .then(r => r.json())
+  .then(stats => {
+    if (!stats || stats.length === 0) {
+      sc.innerHTML = `<div style="color:#4b5563;font-size:12px;text-align:center;padding:10px;">No scorecard data available for this match.</div>`;
       return;
     }
     let winnerBat = stats.filter(s => s.team_name === winner && s.match_type === "bat");
@@ -1079,6 +1078,9 @@ function toggleScorecard(index, winner, loser, playedOn) {
     let winnerBowl = stats.filter(s => s.team_name === winner && s.match_type === "bowl");
     let loserBowl = stats.filter(s => s.team_name === loser && s.match_type === "bowl");
     sc.innerHTML = buildScorecard(winner, loser, winnerBat, loserBat, winnerBowl, loserBowl);
+  })
+  .catch(() => {
+    sc.innerHTML = "<div style='color:#f87171;font-size:13px;text-align:center;padding:10px;'>❌ Could not load scorecard.</div>";
   });
 }
 
