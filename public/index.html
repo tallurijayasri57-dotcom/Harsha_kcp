@@ -279,7 +279,7 @@ html, body { overflow-x: hidden; }
 <div id="leagueModal"><div class="modal-box"><h3>🏆 KCP League — Match Results</h3><div id="leagueContent"></div><button class="modal-close" onclick="closeLeagueModal()">Close</button></div></div>
 <div id="winPopupOverlay"><div class="win-popup-box"><span class="win-trophy">🏆</span><div class="win-confetti-row">🎉 🎊 🎉</div><div class="win-popup-title">Match Winner</div><div class="win-popup-team" id="winTeamName">—</div><div class="win-popup-subtitle">won the match</div><div class="win-popup-margin" id="winMarginText">—</div><button class="win-popup-btn" onclick="closeWinPopup()">Done</button></div></div>
 <div id="tossOverlay"><div class="toss-box"><div class="toss-title">🪙 Coin Toss</div><div class="toss-heading">Who calls the toss?</div><div class="toss-teams-row"><button class="toss-team-btn" id="tossBtnTeam1" onclick="selectTossTeam(0)"></button><button class="toss-team-btn" id="tossBtnTeam2" onclick="selectTossTeam(1)"></button></div><span class="toss-coin" id="tossCoin" onclick="flipCoin()">🪙</span><div class="toss-instruction" id="tossInstruction">Select a team, then flip the coin</div><button class="toss-flip-btn" id="tossFlipBtn" onclick="flipCoin()" disabled>Flip Coin 🪙</button><div class="toss-result-box" id="tossResultBox"><div class="toss-result-winner" id="tossWinnerText">—</div><div class="toss-result-sub" id="tossResultSub">won the toss! Choose to:</div><div class="toss-choice-row"><button class="toss-choice-btn toss-choice-bat" onclick="tossChoice('bat')">🏏 Bat First</button><button class="toss-choice-btn toss-choice-bowl" onclick="tossChoice('bowl')">🎳 Bowl First</button></div></div></div></div>
-<div id="wicketOverlay"><div class="wicket-box"><span class="wicket-emoji">🎯</span><div class="wicket-title">Wicket!</div><div class="wicket-heading">Who got Out?</div><div class="wicket-label">Select the batsman who is out:</div><select id="wicketPlayerSelect"></select><button class="wicket-confirm-btn" onclick="confirmWicket()">Confirm Out ❌</button></div></div>
+<div id="wicketOverlay"><div class="wicket-box"><span class="wicket-emoji">🎯</span><div class="wicket-title">Wicket!</div><div class="wicket-heading">Who got Out?</div><div class="wicket-label">Select batsman who is out:</div><select id="wicketPlayerSelect"></select><div class="wicket-label" style="margin-top:12px;">Dismissal Type:</div><select id="dismissalTypeSelect" onchange="onDismissalTypeChange()" style="width:100%;padding:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(220,38,38,0.4);border-radius:8px;color:#e5e7eb;margin-bottom:12px;box-sizing:border-box;"><option value="Bowled">🏏 Bowled</option><option value="Caught">🤲 Caught Out</option><option value="Run Out">🏃 Run Out</option><option value="Stumped">🧤 Stumped</option></select><div id="dismissedBySection"><div class="wicket-label" id="dismissedByLabel">Fielder Name:</div><select id="dismissedBySelect" style="width:100%;padding:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(220,38,38,0.4);border-radius:8px;color:#e5e7eb;margin-bottom:12px;box-sizing:border-box;"></select></div><button class="wicket-confirm-btn" onclick="confirmWicket()">Confirm Out ❌</button></div></div>
 
 <!-- Player Profile Modal — Photo Upload Added -->
 <div id="playerProfileModal">
@@ -571,7 +571,7 @@ async function updateAllPlayerStatsAfterMatch() {
   const saves = [];
   for (let p in batsmanStats) {
     let s = batsmanStats[p];
-    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBatTeam, match_date: today, match_type: "bat", runs: s.runs, balls_faced: s.balls, fours: s.fours, sixes: s.sixes }) }).catch(e => console.error("Bat stats save error:", e)));
+    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBatTeam, match_date: today, match_type: "bat", runs: s.runs, balls_faced: s.balls, fours: s.fours, sixes: s.sixes, dismissal_type: s.dismissal_type || null, dismissed_by: s.dismissed_by || null }) }).catch(e => console.error("Bat stats save error:", e)));
   }
   for (let p in bowlerStats) {
     let s = bowlerStats[p];
@@ -620,7 +620,19 @@ async function openPlayerProfile(playerName, teamName, role) {
     document.getElementById("pEco").innerText = totalBallsBwl > 0 ? ((totalRunsCon / totalBallsBwl) * 6).toFixed(2) : "0.00";
     let histEl = document.getElementById("profileMatchHistory");
     if (rows.length === 0) { histEl.innerHTML = "<div class='profile-no-matches'>No Match history — Need to play matches 🏏</div>"; }
-    else { histEl.innerHTML = rows.slice(0, 8).map(r => { let d = new Date(r.match_date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }); return r.match_type === "bat" ? '<div class="profile-match-row"><span>' + d + ' &nbsp;🏏 Bat</span><span class="profile-match-score">' + r.runs + ' runs (' + r.balls_faced + ' balls)</span></div>' : '<div class="profile-match-row"><span>' + d + ' &nbsp;🎳 Bowl</span><span class="profile-match-score">' + r.wickets + 'W / ' + r.overs_bowled + ' ov</span></div>'; }).join(""); }
+    else { histEl.innerHTML = rows.slice(0, 8).map(r => {
+        let d = new Date(r.match_date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+        if (r.match_type === "bat") {
+          let dismissal = "";
+          if (r.dismissal_type === "Bowled") dismissal = ' <span style="color:#f87171;font-size:11px;">b ' + (r.dismissed_by || "") + '</span>';
+          else if (r.dismissal_type === "Caught") dismissal = ' <span style="color:#f87171;font-size:11px;">c ' + (r.dismissed_by || "") + '</span>';
+          else if (r.dismissal_type === "Run Out") dismissal = ' <span style="color:#f87171;font-size:11px;">run out (' + (r.dismissed_by || "") + ')</span>';
+          else if (r.dismissal_type === "Stumped") dismissal = ' <span style="color:#f87171;font-size:11px;">st ' + (r.dismissed_by || "") + '</span>';
+          return '<div class="profile-match-row"><span>' + d + ' &nbsp;🏏 Bat' + dismissal + '</span><span class="profile-match-score">' + r.runs + ' runs (' + r.balls_faced + ' balls)</span></div>';
+        } else {
+          return '<div class="profile-match-row"><span>' + d + ' &nbsp;🎳 Bowl</span><span class="profile-match-score">' + r.wickets + 'W / ' + r.overs_bowled + ' ov</span></div>';
+        }
+      }).join(""); }
   } catch(err) {
     console.error("Profile load error:", err);
     ["pRuns","pBalls","pSR","pFours","pSixes","pHS","pWickets","pOvers","pEco"].forEach(id => document.getElementById(id).innerText = "0");
@@ -841,16 +853,41 @@ function wicket() {
   let sel = document.getElementById("wicketPlayerSelect");
   sel.innerHTML = "";
   [strike.value, nonstrike.value].forEach(function(p) { sel.innerHTML += '<option value="' + p + '">' + p + '</option>'; });
+  // Reset dismissal type
+  document.getElementById("dismissalTypeSelect").value = "Bowled";
+  onDismissalTypeChange();
   document.getElementById("wicketOverlay").classList.add("open");
+}
+function onDismissalTypeChange() {
+  let type = document.getElementById("dismissalTypeSelect").value;
+  let section = document.getElementById("dismissedBySection");
+  let label = document.getElementById("dismissedByLabel");
+  let sel = document.getElementById("dismissedBySelect");
+  sel.innerHTML = "";
+  if (type === "Bowled") {
+    section.style.display = "none";
+  } else {
+    section.style.display = "block";
+    if (type === "Caught") label.innerText = "Caught by (Fielder):";
+    else if (type === "Run Out") label.innerText = "Run Out by (Fielder):";
+    else if (type === "Stumped") label.innerText = "Stumped by (WK):";
+    bowlPlayers.forEach(p => { sel.innerHTML += '<option value="' + p + '">' + p + '</option>'; });
+  }
 }
 function confirmWicket() {
   let outPlayer = document.getElementById("wicketPlayerSelect").value;
+  let dismissalType = document.getElementById("dismissalTypeSelect").value;
+  let dismissedBy = dismissalType === "Bowled" ? bowler.value : document.getElementById("dismissedBySelect").value;
   document.getElementById("wicketOverlay").classList.remove("open");
   totalWickets++; ballCount++;
   addBall("W");
   bowlerStats[bowler.value].wickets++;
   bowlerStats[bowler.value].balls++;
-  if (batsmanStats[outPlayer]) batsmanStats[outPlayer].balls++;
+  if (batsmanStats[outPlayer]) {
+    batsmanStats[outPlayer].balls++;
+    batsmanStats[outPlayer].dismissal_type = dismissalType;
+    batsmanStats[outPlayer].dismissed_by = dismissedBy;
+  }
   outBatsmen.push(outPlayer);
   let strikeEl = document.getElementById("strike"), nonStrikeEl = document.getElementById("nonstrike");
   for (let i = strikeEl.options.length - 1; i >= 0; i--) { if (strikeEl.options[i].value === outPlayer) strikeEl.remove(i); }
