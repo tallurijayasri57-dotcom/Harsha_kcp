@@ -601,9 +601,28 @@ function openLeagueModal() {
 }
 function closeLeagueModal() { document.getElementById("leagueModal").classList.remove("open"); }
 function escapeQ(str) { return (str || "").replace(/'/g, "\\'").replace(/"/g, '\\"'); }
+let innings1BatStats = {};
+let innings1BowlStats = {};
+let innings1BatTeam = "";
+let innings1BowlTeam = "";
+
 async function updateAllPlayerStatsAfterMatch(inningsNum) {
   const today = new Date().toISOString().split("T")[0];
   const saves = [];
+
+  // Save innings 1 stats (stored during switchInnings)
+  if (inningsNum === 2 && Object.keys(innings1BatStats).length > 0) {
+    for (let p in innings1BatStats) {
+      let s = innings1BatStats[p];
+      saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: innings1BatTeam, match_date: today, match_type: "bat", runs: s.runs, balls_faced: s.balls, fours: s.fours, sixes: s.sixes, dismissal_type: s.dismissal_type || null, dismissed_by: s.dismissal_type === "Bowled" ? s.dismissed_by : (s.dismissed_by && s.dismissed_by_bowler ? s.dismissed_by + " b " + s.dismissed_by_bowler : s.dismissed_by) || null, match_id: currentMatchId, innings: 1 }) }).catch(e => console.error("Inn1 Bat stats error:", e)));
+    }
+    for (let p in innings1BowlStats) {
+      let s = innings1BowlStats[p];
+      saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: innings1BowlTeam, match_date: today, match_type: "bowl", wickets: s.wickets, overs_bowled: Math.floor(s.balls / 6) + "." + (s.balls % 6), runs_conceded: s.runs, catches: s.catches || 0, run_outs: s.run_outs || 0, stumpings: s.stumpings || 0, match_id: currentMatchId, innings: 1 }) }).catch(e => console.error("Inn1 Bowl stats error:", e)));
+    }
+  }
+
+  // Save current innings stats
   for (let p in batsmanStats) {
     let s = batsmanStats[p];
     saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBatTeam, match_date: today, match_type: "bat", runs: s.runs, balls_faced: s.balls, fours: s.fours, sixes: s.sixes, dismissal_type: s.dismissal_type || null, dismissed_by: s.dismissal_type === "Bowled" ? s.dismissed_by : (s.dismissed_by && s.dismissed_by_bowler ? s.dismissed_by + " b " + s.dismissed_by_bowler : s.dismissed_by) || null, match_id: currentMatchId, innings: inningsNum }) }).catch(e => console.error("Bat stats save error:", e)));
@@ -1010,7 +1029,12 @@ function updateTables() {
 }
 function switchInnings() {
   if (innings == 1) {
-    updateAllPlayerStatsAfterMatch(1);
+    // Store innings 1 stats in memory — save at match end with match_id
+    innings1BatStats = JSON.parse(JSON.stringify(batsmanStats));
+    innings1BowlStats = JSON.parse(JSON.stringify(bowlerStats));
+    innings1BatTeam = matchBatTeam;
+    innings1BowlTeam = matchBowlTeam;
+
     target = totalRuns + 1; targetBox.innerText = "Target: " + target;
     totalRuns = 0; totalWickets = 0; ballCount = 0; balls.innerHTML = "";
     winShown = false; outBatsmen = [];
@@ -1151,11 +1175,18 @@ function loadPointsTable() {
 }
 function finishMatch() {
   if (winShown) return;
-  let winner, loser, margin;
-  if (innings == 1) { winner = matchBowlTeam; loser = matchBatTeam; margin = "won (match ended in 1st innings)"; }
-  else { winner = matchBowlTeam; loser = matchBatTeam; margin = "won by " + (target - 1 - totalRuns) + " runs"; }
+  let winner, loser, margin, inningsNum;
+  if (innings == 1) {
+    winner = matchBowlTeam; loser = matchBatTeam;
+    margin = "won (match ended in 1st innings)";
+    inningsNum = 1;
+  } else {
+    winner = matchBowlTeam; loser = matchBatTeam;
+    margin = "won by " + (target - 1 - totalRuns) + " runs";
+    inningsNum = 2;
+  }
   winShown = true;
-  saveMatchResult(winner, loser, "won", margin).then(() => updateAllPlayerStatsAfterMatch(2));
+  saveMatchResult(winner, loser, "won", margin).then(() => updateAllPlayerStatsAfterMatch(inningsNum));
   showWinPopup(winner, margin);
 }
 </script>
