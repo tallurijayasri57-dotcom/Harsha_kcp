@@ -261,12 +261,12 @@ app.delete("/upcoming-matches/:id", (req, res) => {
 // ================= PLAYER STATS =================
 
 app.post("/player-stats", (req, res) => {
-const { player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, dismissal_type, dismissed_by, catches, run_outs, stumpings } = req.body;
+const { player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, dismissal_type, dismissed_by, catches, run_outs, stumpings, match_id } = req.body;
        if(!player_name || !match_type) return res.status(400).json({ error: "player_name and match_type required" });
     const sr = balls_faced > 0 ? parseFloat(((runs || 0) / balls_faced * 100).toFixed(2)) : 0;
     db.query(
-      `INSERT INTO player_stats (player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, strike_rate, dismissal_type, dismissed_by, catches, run_outs, stumpings)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO player_stats (player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, strike_rate, dismissal_type, dismissed_by, catches, run_outs, stumpings, match_id)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
             player_name,
             team_name || "",
@@ -291,18 +291,18 @@ const { player_name, team_name, match_date, match_type, runs, balls_faced, fours
         }
     );
 });
-
-app.get("/player-stats/:playerName", (req, res) => {
+app.get("/player-stats-by-match", (req, res) => {
+    const { match_id } = req.query;
+    if (!match_id) return res.status(400).json({ error: "match_id required" });
     db.query(
-        "SELECT * FROM player_stats WHERE player_name = ? ORDER BY match_date DESC, id DESC",
-        [req.params.playerName],
+        "SELECT * FROM player_stats WHERE match_id = ? ORDER BY id ASC",
+        [match_id],
         (err, result) => {
-            if(err){ console.log(err); return res.status(500).json({ error: err.message }); }
+            if(err) return res.status(500).json({ error: err.message });
             res.json(result);
         }
     );
 });
-
 // ================= PLAYER PROFILE =================
 
 app.get("/player-profile", (req, res) => {
