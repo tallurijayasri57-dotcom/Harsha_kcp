@@ -313,6 +313,12 @@ html, body { overflow-x: hidden; }
       <div class="profile-stat-box"><div class="profile-stat-val" id="pOvers">0</div><div class="profile-stat-lbl">Overs</div></div>
       <div class="profile-stat-box"><div class="profile-stat-val" id="pEco">0</div><div class="profile-stat-lbl">Economy</div></div>
     </div>
+    <div class="profile-section-title" style="margin-top:16px;">🧤 Fielding Stats</div>
+    <div class="profile-stats-grid">
+      <div class="profile-stat-box"><div class="profile-stat-val" id="pCatches">0</div><div class="profile-stat-lbl">Catches</div></div>
+      <div class="profile-stat-box"><div class="profile-stat-val" id="pRunOuts">0</div><div class="profile-stat-lbl">Run Outs</div></div>
+      <div class="profile-stat-box"><div class="profile-stat-val" id="pStumpings">0</div><div class="profile-stat-lbl">Stumpings</div></div>
+    </div>
     <div class="profile-section-title" style="margin-top:16px;">📋 Match History</div>
     <div id="profileMatchHistory"></div>
     <button class="profile-close-btn" onclick="closePlayerProfile()">Close</button>
@@ -575,7 +581,7 @@ async function updateAllPlayerStatsAfterMatch() {
   }
   for (let p in bowlerStats) {
     let s = bowlerStats[p];
-    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBowlTeam, match_date: today, match_type: "bowl", wickets: s.wickets, overs_bowled: Math.floor(s.balls / 6) + "." + (s.balls % 6), runs_conceded: s.runs }) }).catch(e => console.error("Bowl stats save error:", e)));
+    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBowlTeam, match_date: today, match_type: "bowl", wickets: s.wickets, overs_bowled: Math.floor(s.balls / 6) + "." + (s.balls % 6), runs_conceded: s.runs, catches: s.catches || 0, run_outs: s.run_outs || 0, stumpings: s.stumpings || 0 }) }).catch(e => console.error("Bowl stats save error:", e)));
   }
   await Promise.all(saves);
 }
@@ -599,7 +605,7 @@ async function openPlayerProfile(playerName, teamName, role) {
     }
   }).catch(() => {});
 
-  ["pRuns","pBalls","pSR","pFours","pSixes","pHS","pWickets","pOvers","pEco"].forEach(id => document.getElementById(id).innerText = "...");
+  ["pRuns","pBalls","pSR","pFours","pSixes","pHS","pWickets","pOvers","pEco","pCatches","pRunOuts","pStumpings"].forEach(id => document.getElementById(id).innerText = "...");
   document.getElementById("profileMatchHistory").innerHTML = "<div class='profile-no-matches'>⏳ Loading...</div>";
   try {
     await fetch(API + "/player-profile", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({ player_name: playerName, team_name: teamName, role: role, runs: 0 }) });
@@ -618,6 +624,17 @@ async function openPlayerProfile(playerName, teamName, role) {
     document.getElementById("pWickets").innerText = totalWk;
     document.getElementById("pOvers").innerText = Math.floor(totalBallsBwl / 6) + "." + (totalBallsBwl % 6);
     document.getElementById("pEco").innerText = totalBallsBwl > 0 ? ((totalRunsCon / totalBallsBwl) * 6).toFixed(2) : "0.00";
+
+    // Fielding stats
+    let totalCatches = 0, totalRunOuts = 0, totalStumpings = 0;
+    rows.forEach(r => {
+      totalCatches += r.catches || 0;
+      totalRunOuts += r.run_outs || 0;
+      totalStumpings += r.stumpings || 0;
+    });
+    document.getElementById("pCatches").innerText = totalCatches;
+    document.getElementById("pRunOuts").innerText = totalRunOuts;
+    document.getElementById("pStumpings").innerText = totalStumpings;
     let histEl = document.getElementById("profileMatchHistory");
     if (rows.length === 0) { histEl.innerHTML = "<div class='profile-no-matches'>No Match history — Need to play matches 🏏</div>"; }
     else { histEl.innerHTML = rows.slice(0, 8).map(r => {
@@ -889,6 +906,19 @@ function confirmWicket() {
     batsmanStats[outPlayer].dismissed_by = dismissedBy;
   }
   outBatsmen.push(outPlayer);
+
+  // Track fielding stats for the fielder
+  if (dismissalType === "Caught" && dismissedBy) {
+    if (!bowlerStats[dismissedBy]) bowlerStats[dismissedBy] = { runs: 0, balls: 0, wickets: 0, catches: 0, run_outs: 0, stumpings: 0 };
+    bowlerStats[dismissedBy].catches = (bowlerStats[dismissedBy].catches || 0) + 1;
+  } else if (dismissalType === "Run Out" && dismissedBy) {
+    if (!bowlerStats[dismissedBy]) bowlerStats[dismissedBy] = { runs: 0, balls: 0, wickets: 0, catches: 0, run_outs: 0, stumpings: 0 };
+    bowlerStats[dismissedBy].run_outs = (bowlerStats[dismissedBy].run_outs || 0) + 1;
+  } else if (dismissalType === "Stumped" && dismissedBy) {
+    if (!bowlerStats[dismissedBy]) bowlerStats[dismissedBy] = { runs: 0, balls: 0, wickets: 0, catches: 0, run_outs: 0, stumpings: 0 };
+    bowlerStats[dismissedBy].stumpings = (bowlerStats[dismissedBy].stumpings || 0) + 1;
+  }
+
   let strikeEl = document.getElementById("strike"), nonStrikeEl = document.getElementById("nonstrike");
   for (let i = strikeEl.options.length - 1; i >= 0; i--) { if (strikeEl.options[i].value === outPlayer) strikeEl.remove(i); }
   for (let i = nonStrikeEl.options.length - 1; i >= 0; i--) { if (nonStrikeEl.options[i].value === outPlayer) nonStrikeEl.remove(i); }
