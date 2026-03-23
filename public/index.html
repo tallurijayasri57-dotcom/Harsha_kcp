@@ -962,8 +962,7 @@ function updateScore() {
   if (innings == 2 && target > 0 && totalRuns >= target && !winShown) {
     winShown = true;
     let winner = matchBatTeam, loser = matchBowlTeam, margin = "won by " + (10 - totalWickets) + " wickets";
-    updateAllPlayerStatsAfterMatch();
-    saveMatchResult(winner, loser, "won", margin);
+    saveMatchResult(winner, loser, "won", margin).then(() => updateAllPlayerStatsAfterMatch());
     showWinPopup(winner, margin);
   }
 }
@@ -1025,12 +1024,13 @@ function switchInnings() {
 }
 let currentMatchId = null;
 
-function saveMatchResult(winner, loser, winType, margin) {
+async function saveMatchResult(winner, loser, winType, margin) {
   let today = new Date().toLocaleDateString("en-IN");
-  fetch(API + "/match-results", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winner, loser, win_type: winType, margin, played_on: today }) })
-  .then(res => res.json())
-  .then(data => { currentMatchId = data.id || null; })
-  .catch(() => {});
+  try {
+    let res = await fetch(API + "/match-results", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winner, loser, win_type: winType, margin, played_on: today }) });
+    let data = await res.json();
+    currentMatchId = data.id || null;
+  } catch(e) { currentMatchId = null; }
   let winnerRuns = totalRuns, winnerOvers = parseFloat(Math.floor(ballCount/6) + "." + (ballCount%6));
   let loserRuns = target > 0 ? target - 1 : 0, loserOvers = parseFloat(Math.floor(totalOvers*6/6) + "." + 0);
   fetch(API + "/points-table/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winner, loser, winner_runs: winnerRuns, winner_overs: winnerOvers, loser_runs: loserRuns, loser_overs: loserOvers }) }).catch(() => {});
@@ -1141,8 +1141,7 @@ function finishMatch() {
   if (innings == 1) { winner = matchBowlTeam; loser = matchBatTeam; margin = "won (match ended in 1st innings)"; }
   else { winner = matchBowlTeam; loser = matchBatTeam; margin = "won by " + (target - 1 - totalRuns) + " runs"; }
   winShown = true;
-  updateAllPlayerStatsAfterMatch();
-  saveMatchResult(winner, loser, "won", margin);
+  saveMatchResult(winner, loser, "won", margin).then(() => updateAllPlayerStatsAfterMatch());
   showWinPopup(winner, margin);
 }
 </script>
