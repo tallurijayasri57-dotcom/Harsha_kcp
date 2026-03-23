@@ -392,8 +392,8 @@ html, body { overflow-x: hidden; }
     <button onclick="wide()">Wide</button><button onclick="noball()">No Ball</button><button class="btn-red" onclick="wicket()">Wicket</button>
   </div>
   <div class="section"><h3>Ball By Ball</h3><div id="balls"></div></div>
-  <div class="section"><h3>Batting Scorecard</h3><table><thead><tr><th>Player</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th></th></tr></thead><tbody id="batTable"></tbody></table></div>
-  <div class="section"><h3>Bowling</h3><table><thead><tr><th>Bowler</th><th>O</th><th>R</th><th>W</th><th></th></tr></thead><tbody id="bowlTable"></tbody></table></div>
+  <div class="section"><h3>Batting Scorecard</h3><table><thead><tr><th style="text-align:left;">Batter</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>SR</th></tr></thead><tbody id="batTable"></tbody></table></div>
+  <div class="section"><h3>Bowling</h3><table><thead><tr><th style="text-align:left;">Bowler</th><th>O</th><th>R</th><th>W</th><th>Eco</th></tr></thead><tbody id="bowlTable"></tbody></table></div>
   <button onclick="switchInnings()">Switch Innings</button>
   <button onclick="finishMatch()">Finish Match</button>
 </div>
@@ -942,12 +942,40 @@ function updateTables() {
   for (let p in batsmanStats) {
     let s = batsmanStats[p], isOut = outBatsmen.indexOf(p) !== -1;
     let roleForProfile = batPlayerRoles[p] || "Batsman";
-    batTable.innerHTML += '<tr' + (isOut ? ' style="opacity:0.45;"' : '') + '><td>' + p + (isOut ? ' <span style="color:#f87171;font-size:11px;">(out)</span>' : '') + ' <button class="btn-view-profile" onclick="openPlayerProfile(\'' + escapeQ(p) + '\',\'' + escapeQ(matchBatTeam) + '\',\'' + escapeQ(roleForProfile) + '\')">👤</button></td><td>' + s.runs + '</td><td>' + s.balls + '</td><td>' + s.fours + '</td><td>' + s.sixes + '</td><td></td></tr>';
+    let sr = s.balls > 0 ? ((s.runs / s.balls) * 100).toFixed(1) : "0.0";
+    // Dismissal text like real cricket
+    let dismissalText = "";
+    if (isOut && s.dismissal_type) {
+      if (s.dismissal_type === "Bowled") dismissalText = '<div style="font-size:10px;color:#9ca3af;">b ' + (s.dismissed_by || "") + '</div>';
+      else if (s.dismissal_type === "Caught") dismissalText = '<div style="font-size:10px;color:#9ca3af;">c &amp; b ' + (s.dismissed_by || "") + '</div>';
+      else if (s.dismissal_type === "Run Out") dismissalText = '<div style="font-size:10px;color:#9ca3af;">run out (' + (s.dismissed_by || "") + ')</div>';
+      else if (s.dismissal_type === "Stumped") dismissalText = '<div style="font-size:10px;color:#9ca3af;">st ' + (s.dismissed_by || "") + ' b ' + bowler.value + '</div>';
+    } else if (isOut) {
+      dismissalText = '<div style="font-size:10px;color:#9ca3af;">out</div>';
+    } else {
+      dismissalText = '<div style="font-size:10px;color:#6ee7b7;">not out</div>';
+    }
+    batTable.innerHTML += '<tr' + (isOut ? ' style="opacity:0.6;"' : '') + '>' +
+      '<td style="text-align:left;"><div style="display:flex;align-items:center;gap:6px;"><button class="btn-view-profile" onclick="openPlayerProfile(\'' + escapeQ(p) + '\',\'' + escapeQ(matchBatTeam) + '\',\'' + escapeQ(roleForProfile) + '\')">👤</button><div><div style="font-weight:600;">' + p + '</div>' + dismissalText + '</div></div></td>' +
+      '<td style="font-weight:700;color:' + (isOut ? '#e5e7eb' : '#6ee7b7') + ';">' + s.runs + '</td>' +
+      '<td>' + s.balls + '</td>' +
+      '<td>' + s.fours + '</td>' +
+      '<td>' + s.sixes + '</td>' +
+      '<td style="color:#93c5fd;">' + sr + '</td>' +
+      '</tr>';
   }
   for (let p in bowlerStats) {
-    let s = bowlerStats[p], ov = Math.floor(s.balls / 6) + "." + s.balls % 6;
+    let s = bowlerStats[p];
+    let ov = Math.floor(s.balls / 6) + "." + (s.balls % 6);
+    let eco = s.balls > 0 ? ((s.runs / s.balls) * 6).toFixed(2) : "0.00";
     let roleForProfile = bowlPlayerRoles[p] || "Bowler";
-    bowlTable.innerHTML += '<tr><td>' + p + ' <button class="btn-view-profile" onclick="openPlayerProfile(\'' + escapeQ(p) + '\',\'' + escapeQ(matchBowlTeam) + '\',\'' + escapeQ(roleForProfile) + '\')">👤</button></td><td>' + ov + '</td><td>' + s.runs + '</td><td>' + s.wickets + '</td><td></td></tr>';
+    bowlTable.innerHTML += '<tr>' +
+      '<td style="text-align:left;"><div style="display:flex;align-items:center;gap:6px;"><button class="btn-view-profile" onclick="openPlayerProfile(\'' + escapeQ(p) + '\',\'' + escapeQ(matchBowlTeam) + '\',\'' + escapeQ(roleForProfile) + '\')">👤</button><span style="font-weight:600;">' + p + '</span></div></td>' +
+      '<td>' + ov + '</td>' +
+      '<td>' + s.runs + '</td>' +
+      '<td style="font-weight:700;color:' + (s.wickets > 0 ? '#6ee7b7' : '#e5e7eb') + ';">' + s.wickets + '</td>' +
+      '<td style="color:#93c5fd;">' + eco + '</td>' +
+      '</tr>';
   }
 }
 function switchInnings() {
