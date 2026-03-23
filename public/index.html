@@ -577,7 +577,7 @@ async function updateAllPlayerStatsAfterMatch() {
   const saves = [];
   for (let p in batsmanStats) {
     let s = batsmanStats[p];
-    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBatTeam, match_date: today, match_type: "bat", runs: s.runs, balls_faced: s.balls, fours: s.fours, sixes: s.sixes, dismissal_type: s.dismissal_type || null, dismissed_by: s.dismissed_by || null }) }).catch(e => console.error("Bat stats save error:", e)));
+    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBatTeam, match_date: today, match_type: "bat", runs: s.runs, balls_faced: s.balls, fours: s.fours, sixes: s.sixes, dismissal_type: s.dismissal_type || null, dismissed_by: s.dismissal_type === "Bowled" ? s.dismissed_by : (s.dismissed_by && s.dismissed_by_bowler ? s.dismissed_by + " b " + s.dismissed_by_bowler : s.dismissed_by) || null }) }).catch(e => console.error("Bat stats save error:", e)));
   }
   for (let p in bowlerStats) {
     let s = bowlerStats[p];
@@ -904,6 +904,7 @@ function confirmWicket() {
     batsmanStats[outPlayer].balls++;
     batsmanStats[outPlayer].dismissal_type = dismissalType;
     batsmanStats[outPlayer].dismissed_by = dismissedBy;
+    batsmanStats[outPlayer].dismissed_by_bowler = bowler.value;
   }
   outBatsmen.push(outPlayer);
 
@@ -946,10 +947,11 @@ function updateTables() {
     // Dismissal text like real cricket
     let dismissalText = "";
     if (isOut && s.dismissal_type) {
+      let currentBowler = s.current_bowler || "";
       if (s.dismissal_type === "Bowled") dismissalText = '<div style="font-size:10px;color:#9ca3af;">b ' + (s.dismissed_by || "") + '</div>';
-      else if (s.dismissal_type === "Caught") dismissalText = '<div style="font-size:10px;color:#9ca3af;">c &amp; b ' + (s.dismissed_by || "") + '</div>';
+      else if (s.dismissal_type === "Caught") dismissalText = '<div style="font-size:10px;color:#9ca3af;">c ' + (s.dismissed_by || "") + ' b ' + (s.dismissed_by_bowler || "") + '</div>';
       else if (s.dismissal_type === "Run Out") dismissalText = '<div style="font-size:10px;color:#9ca3af;">run out (' + (s.dismissed_by || "") + ')</div>';
-      else if (s.dismissal_type === "Stumped") dismissalText = '<div style="font-size:10px;color:#9ca3af;">st ' + (s.dismissed_by || "") + ' b ' + bowler.value + '</div>';
+      else if (s.dismissal_type === "Stumped") dismissalText = '<div style="font-size:10px;color:#9ca3af;">st ' + (s.dismissed_by || "") + ' b ' + (s.dismissed_by_bowler || "") + '</div>';
     } else if (isOut) {
       dismissalText = '<div style="font-size:10px;color:#9ca3af;">out</div>';
     } else {
