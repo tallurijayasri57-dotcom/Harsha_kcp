@@ -204,12 +204,13 @@ app.post("/player-stats", (req, res) => {
         overs_bowled, runs_conceded,
         dismissal_type, dismissed_by,
         catches, run_outs, stumpings,
-        match_id
+        match_id, innings
     } = req.body;
     if(!player_name || !match_type) return res.status(400).json({ error: "player_name and match_type required" });
     const sr = balls_faced > 0 ? parseFloat(((runs || 0) / balls_faced * 100).toFixed(2)) : 0;
     db.query(
-        `INSERT INTO player_stats (player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, strike_rate, dismissal_type, dismissed_by, catches, run_outs, stumpings, match_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO player_stats (player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, strike_rate, dismissal_type, dismissed_by, catches, run_outs, stumpings, match_id, innings) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+
         [
             player_name,
             team_name || "",
