@@ -395,6 +395,20 @@ app.get("/player-photo/:player_name", (req, res) => {
     );
 });
 
+// ================= PLAYER STATS BY MATCH =================
+app.get("/player-stats-by-match", (req, res) => {
+    const { winner, loser } = req.query;
+    if (!winner || !loser) return res.status(400).json({ error: "winner and loser required" });
+    db.query(
+        "SELECT * FROM player_stats WHERE team_name IN (?, ?) ORDER BY id ASC",
+        [winner, loser],
+        (err, result) => {
+            if(err) return res.status(500).json({ error: err.message });
+            res.json(result);
+        }
+    );
+});
+
 // ================= SERVER =================
 
 app.listen(process.env.PORT || 3000, ()=>{
