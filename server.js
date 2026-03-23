@@ -66,6 +66,9 @@ db.connect(err => {
         wickets       INT DEFAULT 0,
         overs_bowled  VARCHAR(10) DEFAULT '0.0',
         runs_conceded INT DEFAULT 0,
+        strike_rate   DECIMAL(10,2) DEFAULT 0.00,
+        dismissal_type VARCHAR(50) NULL,
+        dismissed_by  VARCHAR(100) NULL,
         created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )`, (err) => {
         if(err) console.log("player_stats table error:", err);
@@ -82,6 +85,16 @@ db.connect(err => {
         } else {
             db.query(`ALTER TABLE players MODIFY COLUMN role VARCHAR(50) NULL`, (err2) => {
                 if(err2) console.log("modify column error:", err2.message);
+            });
+        }
+    });
+
+    db.query(`SHOW COLUMNS FROM players LIKE 'photo_url'`, (err, result) => {
+        if(err){ console.log("photo_url check error:", err.message); return; }
+        if(result.length === 0){
+            db.query(`ALTER TABLE players ADD COLUMN photo_url VARCHAR(500) NULL`, (err2) => {
+                if(err2) console.log("photo_url column error:", err2.message);
+                else console.log("photo_url column added!");
             });
         }
     });
@@ -248,11 +261,12 @@ app.delete("/upcoming-matches/:id", (req, res) => {
 // ================= PLAYER STATS =================
 
 app.post("/player-stats", (req, res) => {
-    const { player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded } = req.body;
+    const { player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, dismissal_type, dismissed_by } = req.body;
     if(!player_name || !match_type) return res.status(400).json({ error: "player_name and match_type required" });
+    const sr = balls_faced > 0 ? parseFloat(((runs || 0) / balls_faced * 100).toFixed(2)) : 0;
     db.query(
-        `INSERT INTO player_stats (player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, strike_rate)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO player_stats (player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, strike_rate, dismissal_type, dismissed_by)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
             player_name,
             team_name || "",
@@ -265,7 +279,9 @@ app.post("/player-stats", (req, res) => {
             wickets || 0,
             overs_bowled || "0.0",
             runs_conceded || 0,
-            balls_faced > 0 ? parseFloat(((runs || 0) / balls_faced * 100).toFixed(2)) : 0
+            sr,
+            dismissal_type || null,
+            dismissed_by || null
         ],
         (err, result) => {
             if(err){ console.log(err); return res.status(500).json({ error: err.message }); }
@@ -288,49 +304,29 @@ app.get("/player-stats/:playerName", (req, res) => {
 // ================= PLAYER PROFILE =================
 
 app.get("/player-profile", (req, res) => {
-
     db.query("SELECT * FROM player_profile", (err, result) => {
-
         if(err) return res.status(500).send(err);
-
         res.json(result);
-
     });
-
 });
 
 app.post("/player-profile", (req, res) => {
-
     const { player_name, team_name, runs, role } = req.body;
-
     db.query(
-
         "INSERT INTO player_profile (player_name, team_name, runs, role) VALUES (?, ?, ?, ?)",
-
         [player_name, team_name || "", runs || 0, role || ""],
-
         (err, result) => {
-
             if(err) return res.status(500).json({ error: err.message });
-
             res.json({ success: true, id: result.insertId });
-
         }
-
     );
-
 });
 
 app.delete("/player-profile/:id", (req, res) => {
-
     db.query("DELETE FROM player_profile WHERE player_id=?", [req.params.id], (err) => {
-
         if(err) return res.status(500).send(err);
-
         res.json({ message: "Deleted" });
-
     });
-
 });
 
 // ================= POINTS TABLE =================
@@ -341,6 +337,7 @@ app.get("/points-table", (req, res) => {
         res.json(result);
     });
 });
+
 app.post("/points-table/update", (req, res) => {
     const { winner, loser, winner_runs, winner_overs, loser_runs, loser_overs } = req.body;
     db.query(`INSERT INTO points_table (team_name, matches_played, wins, losses, points, runs_scored, runs_conceded, overs_faced, overs_bowled)
@@ -357,13 +354,11 @@ app.post("/points-table/update", (req, res) => {
                 [loser, loser_runs||0, winner_runs||0, loser_overs||0, winner_overs||0, loser_runs||0, winner_runs||0, loser_overs||0, winner_overs||0],
                 (err2) => {
                     if(err2) return res.status(500).send(err2);
-			db.query(`UPDATE points_table SET net_run_rate = CASE WHEN overs_bowled > 0 AND overs_faced > 0 THEN ROUND((runs_scored / overs_faced) - (runs_conceded / overs_bowled), 3) ELSE 0 END`);
-
+                    db.query(`UPDATE points_table SET net_run_rate = CASE WHEN overs_bowled > 0 AND overs_faced > 0 THEN ROUND((runs_scored / overs_faced) - (runs_conceded / overs_bowled), 3) ELSE 0 END`);
                     res.json({ message: "Points updated" });
                 });
         });
 });
-
 
 // ================= PHOTO UPLOAD =================
 
@@ -397,6 +392,7 @@ app.get("/player-photo/:player_name", (req, res) => {
         }
     );
 });
+
 // ================= SERVER =================
 
 app.listen(process.env.PORT || 3000, ()=>{
