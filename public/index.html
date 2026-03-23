@@ -601,16 +601,16 @@ function openLeagueModal() {
 }
 function closeLeagueModal() { document.getElementById("leagueModal").classList.remove("open"); }
 function escapeQ(str) { return (str || "").replace(/'/g, "\\'").replace(/"/g, '\\"'); }
-async function updateAllPlayerStatsAfterMatch() {
+async function updateAllPlayerStatsAfterMatch(inningsNum) {
   const today = new Date().toISOString().split("T")[0];
   const saves = [];
   for (let p in batsmanStats) {
     let s = batsmanStats[p];
-    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBatTeam, match_date: today, match_type: "bat", runs: s.runs, balls_faced: s.balls, fours: s.fours, sixes: s.sixes, dismissal_type: s.dismissal_type || null, dismissed_by: s.dismissal_type === "Bowled" ? s.dismissed_by : (s.dismissed_by && s.dismissed_by_bowler ? s.dismissed_by + " b " + s.dismissed_by_bowler : s.dismissed_by) || null, match_id: currentMatchId }) }).catch(e => console.error("Bat stats save error:", e)));
+    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBatTeam, match_date: today, match_type: "bat", runs: s.runs, balls_faced: s.balls, fours: s.fours, sixes: s.sixes, dismissal_type: s.dismissal_type || null, dismissed_by: s.dismissal_type === "Bowled" ? s.dismissed_by : (s.dismissed_by && s.dismissed_by_bowler ? s.dismissed_by + " b " + s.dismissed_by_bowler : s.dismissed_by) || null, match_id: currentMatchId, innings: inningsNum }) }).catch(e => console.error("Bat stats save error:", e)));
   }
   for (let p in bowlerStats) {
     let s = bowlerStats[p];
-    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBowlTeam, match_date: today, match_type: "bowl", wickets: s.wickets, overs_bowled: Math.floor(s.balls / 6) + "." + (s.balls % 6), runs_conceded: s.runs, catches: s.catches || 0, run_outs: s.run_outs || 0, stumpings: s.stumpings || 0, match_id: currentMatchId }) }).catch(e => console.error("Bowl stats save error:", e)));
+    saves.push(fetch(API + "/player-stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ player_name: p, team_name: matchBowlTeam, match_date: today, match_type: "bowl", wickets: s.wickets, overs_bowled: Math.floor(s.balls / 6) + "." + (s.balls % 6), runs_conceded: s.runs, catches: s.catches || 0, run_outs: s.run_outs || 0, stumpings: s.stumpings || 0, match_id: currentMatchId, innings: inningsNum }) }).catch(e => console.error("Bowl stats save error:", e)));
   }
   await Promise.all(saves);
 }
@@ -962,7 +962,7 @@ function updateScore() {
   if (innings == 2 && target > 0 && totalRuns >= target && !winShown) {
     winShown = true;
     let winner = matchBatTeam, loser = matchBowlTeam, margin = "won by " + (10 - totalWickets) + " wickets";
-    saveMatchResult(winner, loser, "won", margin).then(() => updateAllPlayerStatsAfterMatch());
+    saveMatchResult(winner, loser, "won", margin).then(() => updateAllPlayerStatsAfterMatch(2));
     showWinPopup(winner, margin);
   }
 }
@@ -1010,7 +1010,7 @@ function updateTables() {
 }
 function switchInnings() {
   if (innings == 1) {
-    updateAllPlayerStatsAfterMatch();
+    updateAllPlayerStatsAfterMatch(1);
     target = totalRuns + 1; targetBox.innerText = "Target: " + target;
     totalRuns = 0; totalWickets = 0; ballCount = 0; balls.innerHTML = "";
     winShown = false; outBatsmen = [];
@@ -1073,32 +1073,29 @@ function toggleScorecard(index, winner, loser, matchId) {
       sc.innerHTML = `<div style="color:#4b5563;font-size:12px;text-align:center;padding:10px;">No scorecard data available for this match.</div>`;
       return;
     }
-    let winnerBat = stats.filter(s => s.team_name === winner && s.match_type === "bat");
-    let loserBat = stats.filter(s => s.team_name === loser && s.match_type === "bat");
-    let winnerBowl = stats.filter(s => s.team_name === winner && s.match_type === "bowl");
-    let loserBowl = stats.filter(s => s.team_name === loser && s.match_type === "bowl");
-    sc.innerHTML = buildScorecard(winner, loser, winnerBat, loserBat, winnerBowl, loserBowl);
+    sc.innerHTML = buildScorecard(winner, loser, stats);
   })
   .catch(() => {
     sc.innerHTML = "<div style='color:#f87171;font-size:13px;text-align:center;padding:10px;'>❌ Could not load scorecard.</div>";
   });
 }
 
-function buildScorecard(winner, loser, winnerBat, loserBat, winnerBowl, loserBowl) {
+function buildScorecard(winner, loser, stats) {
   function batTable(players) {
     if (!players || players.length === 0) return "<div style='color:#4b5563;font-size:12px;padding:6px;'>No data</div>";
+    let totalRuns = players.reduce((s, p) => s + (p.runs || 0), 0);
+    let totalWkts = players.filter(p => p.dismissal_type).length;
     let html = '<table style="width:100%;font-size:12px;"><thead><tr><th style="text-align:left;">Batter</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>SR</th></tr></thead><tbody>';
     players.forEach(p => {
       let sr = p.balls_faced > 0 ? ((p.runs / p.balls_faced) * 100).toFixed(1) : "0.0";
-      let dismissal = "";
-      if (p.dismissal_type === "Bowled") dismissal = `b ${p.dismissed_by || ""}`;
-      else if (p.dismissal_type === "Caught") dismissal = `c & b ${p.dismissed_by || ""}`;
-      else if (p.dismissal_type === "Run Out") dismissal = `run out (${p.dismissed_by || ""})`;
-      else if (p.dismissal_type === "Stumped") dismissal = `st ${p.dismissed_by || ""}`;
-      else dismissal = "not out";
+      let dismissal = "not out";
+      if (p.dismissal_type === "Bowled") dismissal = "b " + (p.dismissed_by || "");
+      else if (p.dismissal_type === "Caught") dismissal = "c & b " + (p.dismissed_by || "");
+      else if (p.dismissal_type === "Run Out") dismissal = "run out (" + (p.dismissed_by || "") + ")";
+      else if (p.dismissal_type === "Stumped") dismissal = "st " + (p.dismissed_by || "");
       html += `<tr><td style="text-align:left;"><div style="font-weight:600;">${p.player_name}</div><div style="font-size:10px;color:#9ca3af;">${dismissal}</div></td><td style="font-weight:700;color:#6ee7b7;">${p.runs}</td><td>${p.balls_faced}</td><td>${p.fours}</td><td>${p.sixes}</td><td style="color:#93c5fd;">${sr}</td></tr>`;
     });
-    html += '</tbody></table>';
+    html += `</tbody></table><div style="font-size:12px;color:#a7f3d0;padding:6px 0;font-weight:700;">Total: ${totalRuns}/${totalWkts}</div>`;
     return html;
   }
   function bowlTable(players) {
@@ -1111,15 +1108,32 @@ function buildScorecard(winner, loser, winnerBat, loserBat, winnerBowl, loserBow
     html += '</tbody></table>';
     return html;
   }
+
+  // Split by innings
+  let inn1bat = stats.filter(s => s.innings == 1 && s.match_type === "bat");
+  let inn1bowl = stats.filter(s => s.innings == 1 && s.match_type === "bowl");
+  let inn2bat = stats.filter(s => s.innings == 2 && s.match_type === "bat");
+  let inn2bowl = stats.filter(s => s.innings == 2 && s.match_type === "bowl");
+
+  // Identify batting teams per innings
+  let inn1batTeam = inn1bat.length > 0 ? inn1bat[0].team_name : winner;
+  let inn2batTeam = inn2bat.length > 0 ? inn2bat[0].team_name : loser;
+
   return `
-    <div class="finished-team-title">🏏 ${winner} Batting</div>
-    ${batTable(winnerBat)}
-    <div class="finished-team-title" style="margin-top:12px;">🎳 ${loser} Bowling</div>
-    ${bowlTable(loserBowl)}
-    <div class="finished-team-title" style="margin-top:14px;border-top:1px solid rgba(255,255,255,0.07);padding-top:14px;">🏏 ${loser} Batting</div>
-    ${batTable(loserBat)}
-    <div class="finished-team-title" style="margin-top:12px;">🎳 ${winner} Bowling</div>
-    ${bowlTable(winnerBowl)}
+    <div style="background:rgba(37,99,235,0.1);border-radius:8px;padding:8px 12px;margin-bottom:10px;">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#93c5fd;letter-spacing:1px;">1ST INNINGS</div>
+    </div>
+    <div class="finished-team-title">🏏 ${inn1batTeam} Batting</div>
+    ${batTable(inn1bat)}
+    <div class="finished-team-title" style="margin-top:10px;">🎳 Bowling</div>
+    ${bowlTable(inn1bowl)}
+    <div style="background:rgba(22,163,74,0.1);border-radius:8px;padding:8px 12px;margin:14px 0 10px;">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#6ee7b7;letter-spacing:1px;">2ND INNINGS</div>
+    </div>
+    <div class="finished-team-title">🏏 ${inn2batTeam} Batting</div>
+    ${batTable(inn2bat)}
+    <div class="finished-team-title" style="margin-top:10px;">🎳 Bowling</div>
+    ${bowlTable(inn2bowl)}
   `;
 }
 
@@ -1141,7 +1155,7 @@ function finishMatch() {
   if (innings == 1) { winner = matchBowlTeam; loser = matchBatTeam; margin = "won (match ended in 1st innings)"; }
   else { winner = matchBowlTeam; loser = matchBatTeam; margin = "won by " + (target - 1 - totalRuns) + " runs"; }
   winShown = true;
-  saveMatchResult(winner, loser, "won", margin).then(() => updateAllPlayerStatsAfterMatch());
+  saveMatchResult(winner, loser, "won", margin).then(() => updateAllPlayerStatsAfterMatch(2));
   showWinPopup(winner, margin);
 }
 </script>
