@@ -265,7 +265,7 @@ const { player_name, team_name, match_date, match_type, runs, balls_faced, fours
        if(!player_name || !match_type) return res.status(400).json({ error: "player_name and match_type required" });
     const sr = balls_faced > 0 ? parseFloat(((runs || 0) / balls_faced * 100).toFixed(2)) : 0;
     db.query(
-      `INSERT INTO player_stats (player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, strike_rate, dismissal_type, dismissed_by, catches, run_outs, stumpings, match_id)
+      INSERT INTO player_stats (player_name, team_name, match_date, match_type, runs, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, strike_rate, dismissal_type, dismissed_by, catches, run_outs, stumpings, match_id)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
             player_name,
@@ -284,8 +284,10 @@ const { player_name, team_name, match_date, match_type, runs, balls_faced, fours
             dismissed_by || null,
             catches || 0,
             run_outs || 0,
-            stumpings || 0
-        ],        (err, result) => {
+            stumpings || 0,
+            match_id || null
+        ],          
+        (err, result) => {
             if(err){ console.log(err); return res.status(500).json({ error: err.message }); }
             res.json({ success: true, id: result.insertId });
         }
