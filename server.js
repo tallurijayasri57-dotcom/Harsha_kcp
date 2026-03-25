@@ -71,7 +71,55 @@ db.connect(err => {
         }
     });
 });
+// Create player_stats table
+    db.query(`CREATE TABLE IF NOT EXISTS player_stats (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        player_name VARCHAR(255) NOT NULL,
+        team_name VARCHAR(255),
+        match_date DATE,
+        match_type VARCHAR(10),
+        runs INT DEFAULT 0,
+        balls_faced INT DEFAULT 0,
+        fours INT DEFAULT 0,
+        sixes INT DEFAULT 0,
+        wickets INT DEFAULT 0,
+        overs_bowled VARCHAR(10) DEFAULT '0.0',
+        runs_conceded INT DEFAULT 0,
+        strike_rate FLOAT DEFAULT 0,
+        dismissal_type VARCHAR(50),
+        dismissed_by VARCHAR(255),
+        catches INT DEFAULT 0,
+        run_outs INT DEFAULT 0,
+        stumpings INT DEFAULT 0,
+        match_id INT,
+        innings INT DEFAULT 1,
+        shot_types TEXT,
+        wagon_wheel TEXT
+    )`, (err) => { if(err) console.log("player_stats error:", err.message); else console.log("player_stats table ready!"); });
 
+    // Create player_profile table
+    db.query(`CREATE TABLE IF NOT EXISTS player_profile (
+        player_id INT AUTO_INCREMENT PRIMARY KEY,
+        player_name VARCHAR(255),
+        team_name VARCHAR(255),
+        runs INT DEFAULT 0,
+        role VARCHAR(50)
+    )`, (err) => { if(err) console.log("player_profile error:", err.message); else console.log("player_profile table ready!"); });
+
+    // Create points_table
+    db.query(`CREATE TABLE IF NOT EXISTS points_table (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        team_name VARCHAR(255) UNIQUE,
+        matches_played INT DEFAULT 0,
+        wins INT DEFAULT 0,
+        losses INT DEFAULT 0,
+        points INT DEFAULT 0,
+        runs_scored FLOAT DEFAULT 0,
+        runs_conceded FLOAT DEFAULT 0,
+        overs_faced FLOAT DEFAULT 0,
+        overs_bowled FLOAT DEFAULT 0,
+        net_run_rate FLOAT DEFAULT 0
+    )`, (err) => { if(err) console.log("points_table error:", err.message); else console.log("points_table ready!"); });
 // ================= USERS =================
 
 app.post("/register", (req,res)=>{
