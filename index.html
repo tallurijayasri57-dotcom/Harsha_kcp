@@ -672,7 +672,7 @@ function authenticate() {
       else if (data.error === "invalid_password") alert("Invalid Password");
       else alert("Invalid Login");
     })
-    .catch(() => { localStorage.setItem("currentUser", u); startApp(); });
+    .catch(() => { alert("Server not responding. Try again."); });
   } else {
     fetch(API + "/register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username: u, password: p }) })
     .then(res => res.json())
